@@ -1,0 +1,33 @@
+{
+    "SupportedSettings": {
+        "LinkModes": [
+            "10baseT/Half",
+            "10baseT/Full",
+            "100baseT/Half",
+            "100baseT/Full",
+            "1000baseT/Full"
+        ],
+        "PauseFrameUse": "Symmetric",
+        "FecModes": "Not reported"
+    },
+    "AdvertisedSettings": {
+        "LinkModes": [
+            "10baseT/Half",
+            "10baseT/Full",
+            "100baseT/Half",
+            "100baseT/Full",
+            "1000baseT/Full"
+        ],
+        "PauseFrameUse": "Symmetric",
+        "FecModes": "Not reported"
+    },
+    "Settings": {
+        "Speed": "Unknown!",
+        "SpeedBytes": 0,
+        "Duplex": "Unknown! (255)",
+        "Port": "Twisted Pair",
+        "Transceiver": "internal",
+        "AutoNegotiation": true,
+        "LinkDetected": false
+    }
+}
