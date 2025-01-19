@@ -1,0 +1,12 @@
+{
+    "General": {
+        "TxBytes": 411040976718496,
+        "RxBytes": 2005843568778348,
+        "RxErrors": 341,
+        "TxErrors": 342,
+        "RxDiscards": 0,
+        "TxDiscards": 0,
+        "TxCollisions": 0,
+        "RxCrcErrors": 41
+    }
+}
