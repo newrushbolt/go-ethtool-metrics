@@ -6,15 +6,14 @@ import (
 )
 
 func ParseInfo(rawInfo string) *StatisticsInfo {
+	if rawInfo == "" {
+		return nil
+	}
+
 	generalStatisticsMap, _ := internal.ParseAbstractColonData(rawInfo, "", true)
 	var generalStatistics GeneralStatisticsInfo
 	internal.ParseAbstractDataObject(&generalStatisticsMap, &generalStatistics, "general_statistics")
 
 	statistics := StatisticsInfo{generalStatistics}
 	return &statistics
-	// deviceInfoMap, _ := internal.ParseAbstractColonData(rawInfo, "", true)
-	// var device_info DriverInfo
-	// internal.ParseAbstractDataObject(&deviceInfoMap, &device_info, "driver")
-	// device_info.Features = &features
-	// return &device_info
 }

@@ -1,12 +1,12 @@
 ---
-name: CI
+name: tests
 on:
   pull_request:
   push:
 
 jobs:
   test_go:
-    name: Library tests
+    name: Go tests
     runs-on: ubuntu-24.04
     container:
       image: quay.io/prometheus/golang-builder:1.23-base

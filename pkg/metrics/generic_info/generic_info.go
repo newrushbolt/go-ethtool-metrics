@@ -68,8 +68,12 @@ func _ParseSettings(input string) *Settings {
 	return &output
 }
 
-func ParseInfo(input string) *GenericInfo {
-	cleanInput := _DropHeaderLine(input)
+func ParseInfo(rawInfo string) *GenericInfo {
+	if rawInfo == "" {
+		return nil
+	}
+
+	cleanInput := _DropHeaderLine(rawInfo)
 
 	// TODO: add config
 	// var supportedSetting *AvaliableSettings

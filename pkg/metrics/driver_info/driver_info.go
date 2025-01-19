@@ -4,6 +4,10 @@ package driver_info
 import "github.com/newrushbolt/go-ethtool-metrics/internal"
 
 func ParseInfo(rawInfo string, config *CollectConfig) *DriverInfo {
+	if rawInfo == "" {
+		return nil
+	}
+
 	deviceInfoMap, _ := internal.ParseAbstractColonData(rawInfo, "", true)
 	var device_info DriverInfo
 	internal.ParseAbstractDataObject(&deviceInfoMap, &device_info, "driver")
