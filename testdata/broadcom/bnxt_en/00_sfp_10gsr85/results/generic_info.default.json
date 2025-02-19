@@ -1,0 +1,27 @@
+{
+    "SupportedSettings": {
+        "LinkModes": [
+            "1000baseT/Full",
+            "10000baseT/Full"
+        ],
+        "PauseFrameUse": "Symmetric Receive-only",
+        "FecModes": "Not reported"
+    },
+    "AdvertisedSettings": {
+        "LinkModes": [
+            "1000baseT/Full",
+            "10000baseT/Full"
+        ],
+        "PauseFrameUse": "No",
+        "FecModes": "Not reported"
+    },
+    "Settings": {
+        "Speed": "10000Mb/s",
+        "SpeedBytes": 10000000000,
+        "Duplex": "Full",
+        "Port": "FIBRE",
+        "Transceiver": "internal",
+        "AutoNegotiation": true,
+        "LinkDetected": true
+    }
+}

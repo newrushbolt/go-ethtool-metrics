@@ -1,0 +1,12 @@
+{
+    "DriverName": "igb",
+    "DriverVersion": "4.18.0-269.el8.x86_64",
+    "FirmwareVersion": "1.67, 0x800010dd, 20.5.16",
+    "FirmwareVersionParts": [
+        "1.67",
+        "0x800010dd",
+        "20.5.16"
+    ],
+    "BusAddress": "0000:01:00.0",
+    "Features": null
+}

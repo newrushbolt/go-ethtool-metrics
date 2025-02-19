@@ -1,0 +1,42 @@
+{
+    "Vendor": {
+        "Name": "FS",
+        "OUI": "00:1b:21",
+        "PartNumber": "SFP-10GSR-85",
+        "Revision": "A",
+        "SerialNumber": "F2020533679"
+    },
+    "Diagnostics": {
+        "Values": {
+            "BiasMilliAmps": 6.09,
+            "OutputPowerMilliWatts": 0.6367,
+            "InputPowerMilliWatts": 0.6486,
+            "TemperatureCelcius": 39.18,
+            "Voltage": 3.3544
+        },
+        "Alarms": {
+            "BiasHigh": false,
+            "BiasLow": true,
+            "OutputPowerHigh": false,
+            "OutputLow": false,
+            "TemperatureHigh": false,
+            "TemperatureLow": false,
+            "VoltageHigh": false,
+            "VoltageLow": false,
+            "InputPowerHigh": false,
+            "InputPowerLow": false
+        },
+        "Warnings": {
+            "BiasHigh": false,
+            "BiasLow": false,
+            "OutputPowerHigh": false,
+            "OutputLow": false,
+            "TemperatureHigh": false,
+            "TemperatureLow": false,
+            "VoltageHigh": false,
+            "VoltageLow": false,
+            "InputPowerHigh": false,
+            "InputPowerLow": false
+        }
+    }
+}
