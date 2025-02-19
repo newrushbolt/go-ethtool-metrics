@@ -7,6 +7,6 @@
         "RxDiscards": 0,
         "TxDiscards": 0,
         "TxCollisions": 0,
-        "RxCrcErrors": 41
+        "RxCrcErrors": 201
     }
 }

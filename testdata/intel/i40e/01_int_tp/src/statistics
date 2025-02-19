@@ -9,7 +9,7 @@ NIC statistics:
      tx_dropped: 0
      collisions: 0
      rx_length_errors: 0
-     rx_crc_errors: 41
+     rx_crc_errors: 201
      rx_unicast: 2943327092005
      tx_unicast: 2804194013215
      rx_multicast: 80288525

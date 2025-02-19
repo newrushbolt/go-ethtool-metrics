@@ -1,0 +1,10 @@
+driver: ice
+version: 4.18.0-536.el8.x86_64
+firmware-version: 4.40 0x8001ba1d 22.5.7
+expansion-rom-version: 
+bus-info: 0000:22:00.3
+supports-statistics: yes
+supports-test: yes
+supports-eeprom-access: yes
+supports-register-dump: yes
+supports-priv-flags: yes

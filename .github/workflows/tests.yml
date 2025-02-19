@@ -1,8 +1,14 @@
 ---
 name: tests
 on:
-  pull_request:
   push:
+    branches:
+      - master
+  pull_request:
+
+concurrency:
+  group: tests
+  cancel-in-progress: true
 
 jobs:
   test_go:
