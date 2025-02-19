@@ -1,0 +1,19 @@
+{
+    "Vendor": null,
+    "Diagnostics": {
+        "Values": null,
+        "Alarms": {
+            "BiasHigh": false,
+            "BiasLow": false,
+            "OutputPowerHigh": false,
+            "OutputLow": false,
+            "TemperatureHigh": false,
+            "TemperatureLow": false,
+            "VoltageHigh": false,
+            "VoltageLow": false,
+            "InputPowerHigh": false,
+            "InputPowerLow": false
+        },
+        "Warnings": null
+    }
+}

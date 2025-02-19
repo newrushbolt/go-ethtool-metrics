@@ -593,7 +593,7 @@ NIC statistics:
      port.tx_errors: 0
      port.rx_dropped: 0
      port.tx_dropped_link_down: 0
-     port.rx_crc_errors: 0
+     port.rx_crc_errors: 25
      port.illegal_bytes: 0
      port.mac_local_faults: 2
      port.mac_remote_faults: 2

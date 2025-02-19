@@ -1,0 +1,42 @@
+{
+    "Vendor": {
+        "Name": "OEM",
+        "OUI": "00:1b:21",
+        "PartNumber": "SFP+-10G-SR",
+        "Revision": "A",
+        "SerialNumber": "GJ2308161004"
+    },
+    "Diagnostics": {
+        "Values": {
+            "BiasMilliAmps": 6.762,
+            "OutputPowerMilliWatts": 0.5155,
+            "InputPowerMilliWatts": 0.5964,
+            "TemperatureCelcius": 40.01,
+            "Voltage": 3.4365
+        },
+        "Alarms": {
+            "BiasHigh": false,
+            "BiasLow": false,
+            "OutputPowerHigh": false,
+            "OutputLow": false,
+            "TemperatureHigh": false,
+            "TemperatureLow": false,
+            "VoltageHigh": false,
+            "VoltageLow": false,
+            "InputPowerHigh": false,
+            "InputPowerLow": false
+        },
+        "Warnings": {
+            "BiasHigh": false,
+            "BiasLow": false,
+            "OutputPowerHigh": false,
+            "OutputLow": false,
+            "TemperatureHigh": false,
+            "TemperatureLow": false,
+            "VoltageHigh": false,
+            "VoltageLow": false,
+            "InputPowerHigh": false,
+            "InputPowerLow": false
+        }
+    }
+}

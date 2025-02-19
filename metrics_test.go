@@ -38,6 +38,7 @@ func GetFixtureList() []string {
 	return []string{
 		"intel/i40e/00_sfp_10g_sr85",
 		"intel/i40e/01_int_tp",
+		"intel/i40e/02_sfp_10_or_25g_sr",
 		"intel/igb/00_int_tp",
 		"broadcom/bnxt_en/00_sfp_10gsr85",
 	}
