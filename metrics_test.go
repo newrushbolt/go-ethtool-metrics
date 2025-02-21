@@ -43,13 +43,6 @@ func GetFixtureList() []string {
 	}
 }
 
-func GetOnePerVendorFixtureList() []string {
-	return []string{
-		"intel/i40e/00_sfp_10g_sr85",
-		"broadcom/bnxt_en/00_sfp_10gsr85",
-	}
-}
-
 func TestModuleInfoFull(t *testing.T) {
 	config := module_info.ModuleInfoConfig{
 		CollectDiagnosticsAlarms:   true,
@@ -57,7 +50,7 @@ func TestModuleInfoFull(t *testing.T) {
 		CollectDiagnosticsWarnings: true,
 		CollectVendor:              true,
 	}
-	for _, fixture := range GetOnePerVendorFixtureList() {
+	for _, fixture := range GetFixtureList() {
 		t.Run(fixture, func(t *testing.T) {
 			srcFile, resultFile := ReadFixturePair(fixture, "module_info", "full")
 			info := module_info.ParseInfo(srcFile, &config)
