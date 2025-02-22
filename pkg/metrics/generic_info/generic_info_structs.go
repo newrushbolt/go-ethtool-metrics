@@ -1,12 +1,25 @@
 package generic_info
 
+type GenericInfoConfig struct {
+	CollectAdvertisedSettings bool
+	CollectSupportedSettings  bool
+	CollectSettings           bool
+}
+
+func (config GenericInfoConfig) Default() *GenericInfoConfig {
+	return &GenericInfoConfig{
+		CollectAdvertisedSettings: false,
+		CollectSupportedSettings:  false,
+		CollectSettings:           true,
+	}
+}
+
 type GenericInfo struct {
 	SupportedSettings  *AvaliableSettings
 	AdvertisedSettings *AvaliableSettings
 	Settings           *Settings
 }
 
-// Cut off `Supported ` prefix
 type AvaliableSettings struct {
 	LinkModes     []string `generic_info_avaliable_settings:"link modes"`
 	PauseFrameUse string   `generic_info_avaliable_settings:"pause frame use"`

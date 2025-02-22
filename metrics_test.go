@@ -99,12 +99,28 @@ func TestDriverInfoFull(t *testing.T) {
 	}
 }
 
-func TestGenericInfo(t *testing.T) {
-	// for _, fixture := range []string{} {
+func TestGenericInfoDefault(t *testing.T) {
 	for _, fixture := range GetFixtureList() {
 		t.Run(fixture, func(t *testing.T) {
 			srcFile, resultFile := ReadFixturePair(fixture, "generic_info", "default")
-			info := generic_info.ParseInfo(srcFile)
+			config := generic_info.GenericInfoConfig{}.Default()
+			info := generic_info.ParseInfo(srcFile, *config)
+			infoJson, _ := json.MarshalIndent(info, "", "    ")
+			assert.Equal(t, string(infoJson), resultFile)
+		})
+	}
+}
+
+func TestGenericInfoFull(t *testing.T) {
+	for _, fixture := range GetFixtureList() {
+		t.Run(fixture, func(t *testing.T) {
+			srcFile, resultFile := ReadFixturePair(fixture, "generic_info", "full")
+			config := generic_info.GenericInfoConfig{
+				CollectAdvertisedSettings: true,
+				CollectSupportedSettings:  true,
+				CollectSettings:           true,
+			}
+			info := generic_info.ParseInfo(srcFile, config)
 			infoJson, _ := json.MarshalIndent(info, "", "    ")
 			assert.Equal(t, string(infoJson), resultFile)
 		})
