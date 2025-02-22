@@ -1,26 +1,6 @@
 {
-    "SupportedSettings": {
-        "LinkModes": [
-            "1000baseT/Full",
-            "10000baseT/Full",
-            "25000baseCR/Full",
-            "25000baseKR/Full",
-            "25000baseSR/Full",
-            "1000baseX/Full",
-            "10000baseSR/Full",
-            "10000baseLR/Full"
-        ],
-        "PauseFrameUse": "Symmetric",
-        "FecModes": "None"
-    },
-    "AdvertisedSettings": {
-        "LinkModes": [
-            "1000baseX/Full",
-            "10000baseSR/Full"
-        ],
-        "PauseFrameUse": "No",
-        "FecModes": "None"
-    },
+    "SupportedSettings": null,
+    "AdvertisedSettings": null,
     "Settings": {
         "Speed": "10000Mb/s",
         "SpeedBytes": 10000000000,

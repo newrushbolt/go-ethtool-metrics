@@ -68,27 +68,27 @@ func _ParseSettings(input string) *Settings {
 	return &output
 }
 
-func ParseInfo(rawInfo string) *GenericInfo {
+func ParseInfo(rawInfo string, config GenericInfoConfig) *GenericInfo {
 	if rawInfo == "" {
 		return nil
 	}
 
 	cleanInput := _DropHeaderLine(rawInfo)
 
-	// TODO: add config
-	// var supportedSetting *AvaliableSettings
-	// Add if based on config later
-	supportedSetting := _ParseSupportedSettings(cleanInput)
+	var supportedSetting *AvaliableSettings
+	if config.CollectSupportedSettings {
+		supportedSetting = _ParseSupportedSettings(cleanInput)
+	}
 
-	// TODO: add config
-	// var advertisedSettings *AvaliableSettings
-	// Add if based on config later
-	advertisedSettings := _ParseAdvertisedSettings(cleanInput)
+	var advertisedSettings *AvaliableSettings
+	if config.CollectAdvertisedSettings {
+		advertisedSettings = _ParseAdvertisedSettings(cleanInput)
+	}
 
-	// TODO: add config
-	// var advertisedSettings *AvaliableSettings
-	// Add if based on config later
-	settings := _ParseSettings(cleanInput)
+	var settings *Settings
+	if config.CollectSettings {
+		settings = _ParseSettings(cleanInput)
+	}
 
 	commonInfo := GenericInfo{
 		SupportedSettings:  supportedSetting,

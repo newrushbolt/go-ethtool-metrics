@@ -1,18 +1,6 @@
 {
-    "SupportedSettings": {
-        "LinkModes": [
-            "1000baseT/Full"
-        ],
-        "PauseFrameUse": "Symmetric",
-        "FecModes": "Not reported"
-    },
-    "AdvertisedSettings": {
-        "LinkModes": [
-            "1000baseT/Full"
-        ],
-        "PauseFrameUse": "No",
-        "FecModes": "Not reported"
-    },
+    "SupportedSettings": null,
+    "AdvertisedSettings": null,
     "Settings": {
         "Speed": "1000Mb/s",
         "SpeedBytes": 1000000000,
