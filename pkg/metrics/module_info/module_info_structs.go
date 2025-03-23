@@ -5,15 +5,15 @@ type ModuleInfo struct {
 	Diagnostics *Diagnostics
 }
 
-type ModuleInfoConfig struct {
+type CollectConfig struct {
 	CollectDiagnosticsAlarms   bool
 	CollectDiagnosticsValues   bool
 	CollectDiagnosticsWarnings bool
 	CollectVendor              bool
 }
 
-func (config ModuleInfoConfig) Default() *ModuleInfoConfig {
-	return &ModuleInfoConfig{
+func (config CollectConfig) Default() *CollectConfig {
+	return &CollectConfig{
 		CollectDiagnosticsAlarms:   true,
 		CollectDiagnosticsValues:   false,
 		CollectDiagnosticsWarnings: false,

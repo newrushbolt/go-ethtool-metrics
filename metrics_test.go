@@ -45,7 +45,7 @@ func GetFixtureList() []string {
 }
 
 func TestModuleInfoFull(t *testing.T) {
-	config := module_info.ModuleInfoConfig{
+	config := module_info.CollectConfig{
 		CollectDiagnosticsAlarms:   true,
 		CollectDiagnosticsValues:   true,
 		CollectDiagnosticsWarnings: true,
@@ -62,7 +62,7 @@ func TestModuleInfoFull(t *testing.T) {
 }
 
 func TestModuleInfoDefault(t *testing.T) {
-	config := module_info.ModuleInfoConfig{}.Default()
+	config := module_info.CollectConfig{}.Default()
 	for _, fixture := range GetFixtureList() {
 		t.Run(fixture, func(t *testing.T) {
 			srcFile, resultFile := ReadFixturePair(fixture, "module_info", "default")
@@ -103,8 +103,8 @@ func TestGenericInfoDefault(t *testing.T) {
 	for _, fixture := range GetFixtureList() {
 		t.Run(fixture, func(t *testing.T) {
 			srcFile, resultFile := ReadFixturePair(fixture, "generic_info", "default")
-			config := generic_info.GenericInfoConfig{}.Default()
-			info := generic_info.ParseInfo(srcFile, *config)
+			config := generic_info.CollectConfig{}.Default()
+			info := generic_info.ParseInfo(srcFile, config)
 			infoJson, _ := json.MarshalIndent(info, "", "    ")
 			assert.Equal(t, string(infoJson), resultFile)
 		})
@@ -115,12 +115,12 @@ func TestGenericInfoFull(t *testing.T) {
 	for _, fixture := range GetFixtureList() {
 		t.Run(fixture, func(t *testing.T) {
 			srcFile, resultFile := ReadFixturePair(fixture, "generic_info", "full")
-			config := generic_info.GenericInfoConfig{
+			config := generic_info.CollectConfig{
 				CollectAdvertisedSettings: true,
 				CollectSupportedSettings:  true,
 				CollectSettings:           true,
 			}
-			info := generic_info.ParseInfo(srcFile, config)
+			info := generic_info.ParseInfo(srcFile, &config)
 			infoJson, _ := json.MarshalIndent(info, "", "    ")
 			assert.Equal(t, string(infoJson), resultFile)
 		})
