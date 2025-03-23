@@ -68,7 +68,7 @@ func _ParseSettings(input string) *Settings {
 	return &output
 }
 
-func ParseInfo(rawInfo string, config GenericInfoConfig) *GenericInfo {
+func ParseInfo(rawInfo string, config *CollectConfig) *GenericInfo {
 	if rawInfo == "" {
 		return nil
 	}

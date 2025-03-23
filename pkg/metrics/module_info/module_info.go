@@ -31,7 +31,7 @@ func _ParseDiagnosticsWarnings(rawInfo string) *DiagnosticsWarnings {
 	return &diagnosticsWarnings
 }
 
-func ParseInfo(rawInfo string, config *ModuleInfoConfig) *ModuleInfo {
+func ParseInfo(rawInfo string, config *CollectConfig) *ModuleInfo {
 	// Empty string means we got an error getting raw info from ethtool
 	// This is pretty common for module info `ethtool -m ethX`
 	// TODO: better data detection

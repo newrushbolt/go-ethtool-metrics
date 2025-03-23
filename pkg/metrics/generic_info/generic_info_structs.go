@@ -1,13 +1,13 @@
 package generic_info
 
-type GenericInfoConfig struct {
+type CollectConfig struct {
 	CollectAdvertisedSettings bool
 	CollectSupportedSettings  bool
 	CollectSettings           bool
 }
 
-func (config GenericInfoConfig) Default() *GenericInfoConfig {
-	return &GenericInfoConfig{
+func (config CollectConfig) Default() *CollectConfig {
+	return &CollectConfig{
 		CollectAdvertisedSettings: false,
 		CollectSupportedSettings:  false,
 		CollectSettings:           true,
