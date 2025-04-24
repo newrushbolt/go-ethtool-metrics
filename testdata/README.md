@@ -184,11 +184,11 @@ This where it will require a little bit of data modification, especially if your
                           -    "General": {
                           -        "TxBytes": 24983496586400,
                           -        "RxBytes": 14645706696119,
-                          -        "RxErrors": 0,
+                          -        "RxErrors": null,
                           -        "TxErrors": 0,
-                          -        "RxDiscards": 0,
-                          -        "TxDiscards": 0,
-                          -        "TxCollisions": 0,
+                          -        "RxDiscards": null,
+                          -        "TxDiscards": null,
+                          -        "TxCollisions": null,
                           -        "RxCrcErrors": 0
                           -    }
                           -}
@@ -196,7 +196,7 @@ This where it will require a little bit of data modification, especially if your
             Test:         TestStatistics/intel/i40e/02_sfp_10_or_25g_sr
   ```
 
-As you can see, all error-like metrics returned as zeroes. It looks good from the monitoring perspective, but in tests we cannot differentiate "real" zeroes from "no such metric found or parsed" zeroes.
+As you can see, correctly parsed metrics are returned as zeroes, while absent metrics are set to `null` (`*float64 nil` in Go terms).
 
 So it would be a nice touch to:
 
