@@ -19,9 +19,8 @@ type StatisticsInfo struct {
 
 type PerQueueStatistics []QueueStatistics
 type QueueStatistics struct {
-	// TODO: move to *float64 later
-	TxBytes float64 `queue_statistics:"tx_bytes"`
-	RxBytes float64 `queue_statistics:"rx_bytes"`
+	TxBytes *float64 `queue_statistics:"tx_bytes"`
+	RxBytes *float64 `queue_statistics:"rx_bytes"`
 	// Needs bnxt_en and Nan support first. Fix after 0.0.4
 	// We also need to calulate RxBytes|TxBytes for bnxt_en by summing all types of bytes
 	// RxUcastBytes *float64 `queue_statistics:"rx_ucast_bytes"`
@@ -34,20 +33,21 @@ type QueueStatistics struct {
 }
 
 type GeneralStatistics struct {
-	TxBytes uint64 `general_statistics:"tx_bytes"`
-	RxBytes uint64 `general_statistics:"rx_bytes"`
+	TxBytes *float64 `general_statistics:"tx_bytes"`
+	RxBytes *float64 `general_statistics:"rx_bytes"`
 
-	RxErrors uint64 `general_statistics:"rx_errors"` // bnxt:missing
-	TxErrors uint64 `general_statistics:"tx_errors,tx_err"`
+	RxErrors *float64 `general_statistics:"rx_errors"` // bnxt:missing
+	TxErrors *float64 `general_statistics:"tx_errors,tx_err"`
 
-	RxDiscards   uint64 `general_statistics:"rx_discards,veb.rx_discards,rx_stat_discard"`
-	TxDiscards   uint64 `general_statistics:"tx_discards,veb.tx_discards,tx_stat_discard"`
-	TxCollisions uint64 `general_statistics:"tx_collisions,tx_total_collisions,collisions"`
-	RxCrcErrors  uint64 `general_statistics:"rx_crc_errors,rx_crc_errors.nic"` // Only exists in Intel
+	RxDiscards   *float64 `general_statistics:"rx_discards,veb.rx_discards,rx_stat_discard"`
+	TxDiscards   *float64 `general_statistics:"tx_discards,veb.tx_discards,tx_stat_discard"`
+	TxCollisions *float64 `general_statistics:"tx_collisions,tx_total_collisions,collisions"`
+	RxCrcErrors  *float64 `general_statistics:"rx_crc_errors,rx_crc_errors.nic"` // Only exists in Intel
 }
 
 // Other possible variables
 // TODO: Add testdata for virtio
+
 // rx_queue_0_packets: 99116794
 // rx_queue_0_bytes: 708784361629
 // rx_queue_0_drops: 0
