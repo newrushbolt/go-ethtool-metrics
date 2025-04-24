@@ -11,7 +11,15 @@ import (
 
 type queuedMetrics map[int]map[string]string
 
+// TODO: calculate values for bnxt_en
 // func calculateBroadcomPerQueueBytes
+// ./testdata/broadcom/bnxt_en/00_sfp_10gsr85/src/statistics:7:		[0]: rx_ucast_bytes: 594284585291
+// ./testdata/broadcom/bnxt_en/00_sfp_10gsr85/src/statistics:8:		[0]: rx_mcast_bytes: 226857008
+// ./testdata/broadcom/bnxt_en/00_sfp_10gsr85/src/statistics:9:		[0]: rx_bcast_bytes: 1857840
+// ./testdata/broadcom/bnxt_en/00_sfp_10gsr85/src/statistics:15:		[0]: tx_ucast_bytes: 1790928332018
+// ./testdata/broadcom/bnxt_en/00_sfp_10gsr85/src/statistics:16:		[0]: tx_mcast_bytes: 86
+// ./testdata/broadcom/bnxt_en/00_sfp_10gsr85/src/statistics:17:		[0]: tx_bcast_bytes: 0
+// ./testdata/broadcom/bnxt_en/00_sfp_10gsr85/src/statistics:19:		[0]: tpa_bytes:      94005443409
 
 func compileQueuedRegexps(rawQueuedRegexps map[string][]string) map[string][]*regexp.Regexp {
 	queuedRegexps := make(map[string][]*regexp.Regexp, len(rawQueuedRegexps))
@@ -102,15 +110,6 @@ func extractQueuedMetricsV2(srcMetrics map[string]string) queuedMetrics {
 	return queuedMetricsMap
 }
 
-// func calculateBroadcomPerQueueBytes
-// ./testdata/broadcom/bnxt_en/00_sfp_10gsr85/src/statistics:7:		[0]: rx_ucast_bytes: 594284585291
-// ./testdata/broadcom/bnxt_en/00_sfp_10gsr85/src/statistics:8:		[0]: rx_mcast_bytes: 226857008
-// ./testdata/broadcom/bnxt_en/00_sfp_10gsr85/src/statistics:9:		[0]: rx_bcast_bytes: 1857840
-// ./testdata/broadcom/bnxt_en/00_sfp_10gsr85/src/statistics:15:		[0]: tx_ucast_bytes: 1790928332018
-// ./testdata/broadcom/bnxt_en/00_sfp_10gsr85/src/statistics:16:		[0]: tx_mcast_bytes: 86
-// ./testdata/broadcom/bnxt_en/00_sfp_10gsr85/src/statistics:17:		[0]: tx_bcast_bytes: 0
-// ./testdata/broadcom/bnxt_en/00_sfp_10gsr85/src/statistics:19:		[0]: tpa_bytes:      94005443409
-
 func parseQueuedInfo(statisticsMap map[string]string) *PerQueueStatistics {
 	allQueuedMetrics := extractQueuedMetricsV2(statisticsMap)
 	perQueueStatistics := make(PerQueueStatistics, len(allQueuedMetrics))
@@ -123,7 +122,7 @@ func parseQueuedInfo(statisticsMap map[string]string) *PerQueueStatistics {
 }
 
 func ParseInfo(rawInfo string, config *CollectConfig) *StatisticsInfo {
-	slog.SetLogLoggerLevel(slog.LevelDebug)
+	slog.SetLogLoggerLevel(internal.GetLogLevel())
 
 	if rawInfo == "" {
 		slog.Info("Module got empty ethtool data, skipping", "module", "Statistics")
@@ -131,7 +130,7 @@ func ParseInfo(rawInfo string, config *CollectConfig) *StatisticsInfo {
 	}
 
 	statistics := StatisticsInfo{}
-	generalStatisticsMap, _ := internal.ParseAbstractColonData(rawInfo, "", true)
+	generalStatisticsMap := internal.ParseAbstractColonData(rawInfo, "", true)
 
 	if config.PerQueue {
 		statistics.PerQueue = parseQueuedInfo(generalStatisticsMap)

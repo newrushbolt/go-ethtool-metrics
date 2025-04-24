@@ -28,7 +28,7 @@ type AvaliableSettings struct {
 
 type Settings struct {
 	Speed           string
-	SpeedBytes      uint64
+	SpeedBytes      *float64
 	Duplex          string
 	Port            string
 	Transceiver     string

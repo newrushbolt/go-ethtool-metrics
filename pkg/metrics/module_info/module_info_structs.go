@@ -62,9 +62,9 @@ type DiagnosticsWarnings struct {
 }
 
 type DiagnosticsValues struct {
-	BiasMilliAmps         float32 `diag_values:"Laser bias current"`
-	OutputPowerMilliWatts float32 `diag_values:"Laser output power"`
-	InputPowerMilliWatts  float32 `diag_values:"Receiver signal average optical power"`
-	TemperatureCelcius    float32 `diag_values:"Module temperature"`
-	Voltage               float32 `diag_values:"Module voltage"`
+	BiasMilliAmps         *float64 `diag_values:"Laser bias current"`
+	OutputPowerMilliWatts *float64 `diag_values:"Laser output power"`
+	InputPowerMilliWatts  *float64 `diag_values:"Receiver signal average optical power"`
+	TemperatureCelcius    *float64 `diag_values:"Module temperature"`
+	Voltage               *float64 `diag_values:"Module voltage"`
 }

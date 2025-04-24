@@ -8,14 +8,14 @@ import (
 )
 
 func ParseInfo(rawInfo string, config *CollectConfig) *DriverInfo {
-	slog.SetLogLoggerLevel(slog.LevelDebug)
+	slog.SetLogLoggerLevel(internal.GetLogLevel())
 
 	if rawInfo == "" {
 		slog.Info("Module got empty ethtool data, skipping", "module", "driver_info")
 		return nil
 	}
 
-	deviceInfoMap, _ := internal.ParseAbstractColonData(rawInfo, "", true)
+	deviceInfoMap := internal.ParseAbstractColonData(rawInfo, "", true)
 	var device_info DriverInfo
 	internal.ParseAbstractDataObject(&deviceInfoMap, &device_info, "driver")
 

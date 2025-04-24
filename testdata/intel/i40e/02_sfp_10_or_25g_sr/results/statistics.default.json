@@ -2,11 +2,11 @@
     "General": {
         "TxBytes": 24983496586400,
         "RxBytes": 14645706696119,
-        "RxErrors": 0,
+        "RxErrors": null,
         "TxErrors": 5,
-        "RxDiscards": 0,
-        "TxDiscards": 0,
-        "TxCollisions": 0,
+        "RxDiscards": null,
+        "TxDiscards": null,
+        "TxCollisions": null,
         "RxCrcErrors": 1
     },
     "PerQueue": null
