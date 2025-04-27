@@ -51,12 +51,12 @@ NIC statistics:
      tx_fifo_errors: 0
      tx_heartbeat_errors: 0
      tx_queue_0_packets: 0
-     tx_queue_0_bytes: 0
+     tx_queue_0_bytes: 434523452
      tx_queue_0_restart: 0
-     tx_queue_1_packets: 0
-     tx_queue_1_bytes: 0
+     tx_queue_1_packets: 33445
+     tx_queue_1_bytes: 452345
      tx_queue_1_restart: 0
-     tx_queue_2_packets: 0
+     tx_queue_2_packets: 3434
      tx_queue_2_bytes: 0
      tx_queue_2_restart: 0
      tx_queue_3_packets: 0
@@ -79,8 +79,8 @@ NIC statistics:
      rx_queue_0_drops: 0
      rx_queue_0_csum_err: 0
      rx_queue_0_alloc_failed: 0
-     rx_queue_1_packets: 0
-     rx_queue_1_bytes: 0
+     rx_queue_1_packets: 3452345
+     rx_queue_1_bytes: 4523452345
      rx_queue_1_drops: 0
      rx_queue_1_csum_err: 0
      rx_queue_1_alloc_failed: 0

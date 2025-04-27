@@ -1,10 +1,17 @@
 // Driver info, eg `ethtool -i ethX`
 package driver_info
 
-import "github.com/newrushbolt/go-ethtool-metrics/internal"
+import (
+	"log/slog"
+
+	"github.com/newrushbolt/go-ethtool-metrics/internal"
+)
 
 func ParseInfo(rawInfo string, config *CollectConfig) *DriverInfo {
+	slog.SetLogLoggerLevel(slog.LevelDebug)
+
 	if rawInfo == "" {
+		slog.Info("Module got empty ethtool data, skipping", "module", "driver_info")
 		return nil
 	}
 
