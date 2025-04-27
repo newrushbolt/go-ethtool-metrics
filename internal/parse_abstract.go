@@ -80,6 +80,8 @@ func ParseAbstractDataObject(data *map[string]string, obj interface{}, tagName s
 						field.SetString(value)
 					case reflect.Float32:
 						field.SetFloat(parseFloat32(value))
+					case reflect.Float64:
+						field.SetFloat(parseFloat32(value))
 					case reflect.Uint64:
 						uint_value, err := strconv.ParseUint(value, 10, 64)
 						if err != nil {
@@ -129,12 +131,24 @@ func ParseAbstractColonData(data string, prefix string, keepPrefix bool) (map[st
 		}
 	}
 	for _, line := range lines {
-		splitted_line := strings.SplitN(line, ":", 2)
-		if len(splitted_line) != 2 {
+		separatorIndex := strings.LastIndex(line, ": ")
+		if separatorIndex < 0 {
 			continue
 		}
-		key := strings.TrimSpace(splitted_line[0])
-		value := strings.TrimSpace(splitted_line[1])
+		splittedLine := []string{
+			line[:separatorIndex],
+			line[separatorIndex+1:],
+		}
+		if strings.Contains(line, "BusAddress") {
+			slog.Debug("")
+		}
+		splittedLineLength := len(splittedLine)
+		if !(splittedLineLength == 2 || splittedLineLength == 3) {
+			slog.Debug("Splitted line has invalid ammound of parts", "line", line, "splitted_line", splittedLine)
+			continue
+		}
+		key := strings.TrimSpace(splittedLine[0])
+		value := strings.TrimSpace(splittedLine[1])
 		if prefix != "" {
 			if strings.HasPrefix(key, prefix) {
 				if !keepPrefix {

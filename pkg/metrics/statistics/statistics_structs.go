@@ -1,10 +1,39 @@
 package statistics
 
-type StatisticsInfo struct {
-	General GeneralStatisticsInfo
+type CollectConfig struct {
+	General  bool
+	PerQueue bool
 }
 
-type GeneralStatisticsInfo struct {
+func (config CollectConfig) Default() *CollectConfig {
+	return &CollectConfig{
+		General:  true,
+		PerQueue: false,
+	}
+}
+
+type StatisticsInfo struct {
+	General  *GeneralStatistics
+	PerQueue *PerQueueStatistics
+}
+
+type PerQueueStatistics []QueueStatistics
+type QueueStatistics struct {
+	// TODO: move to *float64 later
+	TxBytes float64 `queue_statistics:"tx_bytes"`
+	RxBytes float64 `queue_statistics:"rx_bytes"`
+	// Needs bnxt_en and Nan support first. Fix after 0.0.4
+	// We also need to calulate RxBytes|TxBytes for bnxt_en by summing all types of bytes
+	// RxUcastBytes *float64 `queue_statistics:"rx_ucast_bytes"`
+	// RxMcastBytes *float64 `queue_statistics:"rx_mcast_bytes"`
+	// RxBcastBytes *float64 `queue_statistics:"rx_bcast_bytes"`
+	// TxUcastBytes *float64 `queue_statistics:"tx_ucast_bytes"`
+	// TxMcastBytes *float64 `queue_statistics:"tx_mcast_bytes"`
+	// TxBcastBytes *float64 `queue_statistics:"tx_bcast_bytes"`
+	// TpaBytes     *float64 `queue_statistics:"tpa_bytes"`
+}
+
+type GeneralStatistics struct {
 	TxBytes uint64 `general_statistics:"tx_bytes"`
 	RxBytes uint64 `general_statistics:"rx_bytes"`
 
@@ -17,26 +46,23 @@ type GeneralStatisticsInfo struct {
 	RxCrcErrors  uint64 `general_statistics:"rx_crc_errors,rx_crc_errors.nic"` // Only exists in Intel
 }
 
+// Other possible variables
+// TODO: Add testdata for virtio
+// rx_queue_0_packets: 99116794
+// rx_queue_0_bytes: 708784361629
+// rx_queue_0_drops: 0
+// rx_queue_0_xdp_packets: 0
+// rx_queue_0_xdp_tx: 0
+// rx_queue_0_xdp_redirects: 0
+// rx_queue_0_xdp_drops: 0
+// rx_queue_0_kicks: 4060
+
+// tx_queue_0_packets: 91340287
+// tx_queue_0_bytes: 1484407675445
+// tx_queue_0_xdp_tx: 0
+// tx_queue_0_xdp_tx_drops: 0
+// tx_queue_0_kicks: 89560041
+
 // Only exists in bnxt, should probably have separate struct
 // tx_pause_frames: 0
 // rx_pause_frames: 0
-
-// Only exists in intel, should probably have separate struct
-// rx_dropped: 0
-// tx_dropped: 0
-// rx_unknown_protocol
-// rx_alloc_fail: 0
-// rx_pg_alloc_fail: 0
-// port.tx_dropped_link_down: 0
-// port.illegal_bytes: 0
-// port.mac_local_faults: 2
-// port.mac_remote_faults: 2
-// port.tx_timeout: 0
-// port.rx_length_errors: 0
-// port.rx_oversize: 0
-
-// Only exists in i40
-// WTF, rx_csum_bad is different from rx_crc_errors
-// testdata/intel/i40e/02_sfp_10_or_25g_sr/src/statistics:563:     rx_csum_bad.nic: 4757
-// testdata/intel/i40e/00_sfp_10g_sr85/src/statistics:601:     port.rx_csum_bad: 1778
-// testdata/intel/i40e/01_int_tp/src/statistics:232:     port.rx_csum_bad: 0
