@@ -8,5 +8,6 @@
         "TxDiscards": 22,
         "TxCollisions": 28,
         "RxCrcErrors": 25
-    }
+    },
+    "PerQueue": null
 }
