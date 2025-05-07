@@ -23,7 +23,7 @@
     },
     "Settings": {
         "Speed": "Unknown!",
-        "SpeedBytes": 0,
+        "SpeedBytes": null,
         "Duplex": "Unknown! (255)",
         "Port": "Twisted Pair",
         "Transceiver": "internal",

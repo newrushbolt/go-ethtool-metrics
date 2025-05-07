@@ -2,6 +2,8 @@
 package generic_info
 
 import (
+	"log/slog"
+	"math"
 	"regexp"
 	"strconv"
 	"strings"
@@ -19,57 +21,64 @@ func _DropHeaderLine(input string) string {
 	}
 }
 
-func _GetPortSpeedBytes(input string) (speedBytes uint64) {
+func _GetPortSpeedBytes(input string) (speedBytes float64) {
 	speedRe := regexp.MustCompile(`(\d+)(.+)`)
 	result_slice := speedRe.FindAllStringSubmatch(input, -1)
-	var rawSpeedBytes uint64
+	var rawSpeedBytes float64
 	var speedSuffix string
 	result := result_slice[0]
-	if len(result) == 3 {
-		var _ error
-		rawSpeedBytes, _ = strconv.ParseUint(result[1], 10, 64)
-		// TODO: log error
-		speedSuffix = result[2]
-
-	} else {
-		return uint64(0)
+	if len(result) != 3 {
+		return math.NaN()
 	}
-	speedMultiplier := uint64(0)
+	var err error
+	rawSpeedBytes, err = strconv.ParseFloat(result[1], 64)
+	if err != nil {
+		slog.Error("Cannot get float64 from speed string", "speed_string", input)
+		return math.NaN()
+	}
+	speedSuffix = result[2]
+
+	var speedMultiplier float64
 	// Doing straight metric convesion, not 2^x
 	switch speedSuffix {
 	case "Mb/s":
 		speedMultiplier = 1000 * 1000
 	case "Gb/s":
 		speedMultiplier = 1000 * 1000 * 1000
+	default:
+		slog.Error("Cannot get speed units from string, must have 'Gb/s' or 'Mb/s'", "speed_string", "input")
+		return math.NaN()
 	}
-	// TODO: log unit error
 	speedBytes = rawSpeedBytes * speedMultiplier
 	return speedBytes
 }
 
 func _ParseSupportedSettings(input string) *AvaliableSettings {
-	inputMap, _ := internal.ParseAbstractColonData(input, "Supported ", false)
 	var output AvaliableSettings
+	inputMap := internal.ParseAbstractColonData(input, "Supported ", false)
 	internal.ParseAbstractDataObject(&inputMap, &output, "generic_info_avaliable_settings")
 	return &output
 }
 
 func _ParseAdvertisedSettings(input string) *AvaliableSettings {
-	inputMap, _ := internal.ParseAbstractColonData(input, "Advertised ", false)
 	var output AvaliableSettings
+	inputMap := internal.ParseAbstractColonData(input, "Advertised ", false)
 	internal.ParseAbstractDataObject(&inputMap, &output, "generic_info_avaliable_settings")
 	return &output
 }
 
 func _ParseSettings(input string) *Settings {
-	inputMap, _ := internal.ParseAbstractColonData(input, "", true)
 	var output Settings
+	inputMap := internal.ParseAbstractColonData(input, "", true)
 	internal.ParseAbstractDataObject(&inputMap, &output, "generic_info_settings")
 	return &output
 }
 
 func ParseInfo(rawInfo string, config *CollectConfig) *GenericInfo {
+	slog.SetLogLoggerLevel(internal.GetLogLevel())
+
 	if rawInfo == "" {
+		slog.Info("Module got empty ethtool data, skipping", "module", "generic_info")
 		return nil
 	}
 
@@ -96,7 +105,8 @@ func ParseInfo(rawInfo string, config *CollectConfig) *GenericInfo {
 		Settings:           settings,
 	}
 	if (commonInfo.Settings.Speed != "Unknown!") && (commonInfo.Settings.Speed != "") {
-		commonInfo.Settings.SpeedBytes = _GetPortSpeedBytes(commonInfo.Settings.Speed)
+		speedBytes := _GetPortSpeedBytes(commonInfo.Settings.Speed)
+		commonInfo.Settings.SpeedBytes = &speedBytes
 	}
 	return &commonInfo
 }

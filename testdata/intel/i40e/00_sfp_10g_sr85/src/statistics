@@ -1,8 +1,9 @@
+# tx_bytes was present in this output,
+# but was removed on purpose to test missing metrics
 NIC statistics:
      rx_packets: 258269468302
      tx_packets: 765693869721
      rx_bytes: 262807800957497
-     tx_bytes: 721274579342884
      rx_errors: 19
      tx_errors: 20
      rx_dropped: 0
