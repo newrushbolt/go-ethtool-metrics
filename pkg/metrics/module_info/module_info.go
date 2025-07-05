@@ -37,13 +37,12 @@ func _ParseDiagnosticsWarnings(rawInfo string) *DiagnosticsWarnings {
 
 func ParseInfo(rawInfo string, config *CollectConfig) *ModuleInfo {
 	slog.SetLogLoggerLevel(internal.GetLogLevel())
-
 	// Empty string means we got an error getting raw info from ethtool
 	// This is pretty common for module info `ethtool -m ethX`
 	//
 	// TODO: better data detection
 	// Maybe we should look into the common info `ethtool ethX`
-	// and decide weather we should even try to get module info
+	// and decide whether we should even try to get module info
 	if rawInfo == "" {
 		slog.Info("Module got empty ethtool data, skipping", "module", "ModuleInfo")
 		return nil

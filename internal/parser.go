@@ -51,7 +51,7 @@ func parseSlice(input string) []string {
 }
 
 // Possible types in data are:
-// - float64 (should be used for all numeric types, regarding of signed\unsigned and postitive\negative)
+// - float64 (should be used for all numeric types, regarding of signed\unsigned and positive\negative)
 // - string
 // - bool
 // - slice
@@ -153,7 +153,7 @@ func ParseAbstractColonData(data string, prefix string, keepPrefix bool) map[str
 		splittedLineLength := len(splittedLine)
 		// TODO: better logic for splitting lines
 		if !(splittedLineLength == 2 || splittedLineLength == 3) {
-			slog.Debug("Splitted line has invalid ammound of parts", "line", line, "splitted_line", splittedLine)
+			slog.Debug("Splitted line has invalid amount of parts", "line", line, "splitted_line", splittedLine)
 			continue
 		}
 		key := strings.TrimSpace(splittedLine[0])
