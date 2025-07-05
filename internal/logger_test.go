@@ -11,7 +11,7 @@ import (
 func TestGetLogLevelDefault(t *testing.T) {
 	t.Setenv("GO_ETHTOOL_METRICS_LOG_LEVEL", "")
 	level := internal.GetLogLevel()
-	assert.Equal(t, level, slog.LevelDebug)
+	assert.Equal(t, level, slog.LevelInfo)
 }
 
 func TestGetLogLevel(t *testing.T) {

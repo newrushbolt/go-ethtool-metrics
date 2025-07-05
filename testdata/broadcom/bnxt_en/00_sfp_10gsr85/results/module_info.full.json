@@ -11,7 +11,7 @@
             "BiasMilliAmps": 99.168,
             "OutputPowerMilliWatts": 5.7,
             "InputPowerMilliWatts": 2.731,
-            "TemperatureCelcius": 0,
+            "TemperatureCelsius": 0,
             "Voltage": 0.2287
         },
         "Alarms": {

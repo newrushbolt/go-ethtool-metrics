@@ -22,7 +22,7 @@ type QueueStatistics struct {
 	TxBytes *float64 `queue_statistics:"tx_bytes"`
 	RxBytes *float64 `queue_statistics:"rx_bytes"`
 	// Needs bnxt_en and Nan support first. Fix after 0.0.4
-	// We also need to calulate RxBytes|TxBytes for bnxt_en by summing all types of bytes
+	// We also need to calculate RxBytes|TxBytes for bnxt_en by summing all types of bytes
 	// RxUcastBytes *float64 `queue_statistics:"rx_ucast_bytes"`
 	// RxMcastBytes *float64 `queue_statistics:"rx_mcast_bytes"`
 	// RxBcastBytes *float64 `queue_statistics:"rx_bcast_bytes"`
@@ -46,7 +46,7 @@ type GeneralStatistics struct {
 }
 
 // Other possible variables
-// TODO: Add testdata for virtio
+// TODO: Add testdata for "virtio"
 
 // rx_queue_0_packets: 99116794
 // rx_queue_0_bytes: 708784361629
