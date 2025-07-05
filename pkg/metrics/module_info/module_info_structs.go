@@ -65,6 +65,6 @@ type DiagnosticsValues struct {
 	BiasMilliAmps         *float64 `diag_values:"Laser bias current"`
 	OutputPowerMilliWatts *float64 `diag_values:"Laser output power"`
 	InputPowerMilliWatts  *float64 `diag_values:"Receiver signal average optical power"`
-	TemperatureCelcius    *float64 `diag_values:"Module temperature"`
+	TemperatureCelsius    *float64 `diag_values:"Module temperature"`
 	Voltage               *float64 `diag_values:"Module voltage"`
 }
