@@ -38,7 +38,7 @@ Module voltage                            : 3.3544 V
         "BiasMilliAmps": 6.09,
         "OutputPowerMilliWatts": 0.6367,
         "InputPowerMilliWatts": 0.6486,
-        "TemperatureCelcius": 39.18,
+        "TemperatureCelsius": 39.18,
         "Voltage": 3.3544
     }
 }

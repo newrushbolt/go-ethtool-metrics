@@ -39,7 +39,7 @@ func _GetPortSpeedBytes(input string) (speedBytes float64) {
 	speedSuffix = result[2]
 
 	var speedMultiplier float64
-	// Doing straight metric convesion, not 2^x
+	// Doing straight metric conversion, not 2^x
 	switch speedSuffix {
 	case "Mb/s":
 		speedMultiplier = 1000 * 1000
