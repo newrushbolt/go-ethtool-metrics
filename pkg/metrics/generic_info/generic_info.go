@@ -4,11 +4,16 @@ package generic_info
 import (
 	"log/slog"
 	"math"
+	"os"
 	"regexp"
 	"strconv"
 	"strings"
 
 	"github.com/newrushbolt/go-ethtool-metrics/internal"
+)
+
+var (
+	Logger *slog.Logger
 )
 
 func _DropHeaderLine(input string) string {
@@ -33,7 +38,7 @@ func _GetPortSpeedBytes(input string) (speedBytes float64) {
 	var err error
 	rawSpeedBytes, err = strconv.ParseFloat(result[1], 64)
 	if err != nil {
-		slog.Error("Cannot get float64 from speed string", "speed_string", input)
+		Logger.Error("Cannot get float64 from speed string", "speed_string", input)
 		return math.NaN()
 	}
 	speedSuffix = result[2]
@@ -46,7 +51,7 @@ func _GetPortSpeedBytes(input string) (speedBytes float64) {
 	case "Gb/s":
 		speedMultiplier = 1000 * 1000 * 1000
 	default:
-		slog.Error("Cannot get speed units from string, must have 'Gb/s' or 'Mb/s'", "speed_string", "input")
+		Logger.Error("Cannot get speed units from string, must have 'Gb/s' or 'Mb/s'", "speed_string", "input")
 		return math.NaN()
 	}
 	speedBytes = rawSpeedBytes * speedMultiplier
@@ -55,30 +60,31 @@ func _GetPortSpeedBytes(input string) (speedBytes float64) {
 
 func _ParseSupportedSettings(input string) *AvaliableSettings {
 	var output AvaliableSettings
-	inputMap := internal.ParseAbstractColonData(input, "Supported ", false)
-	internal.ParseAbstractDataObject(&inputMap, &output, "generic_info_avaliable_settings")
+	inputMap := internal.ParseAbstractColonData(Logger, input, "Supported ", false)
+	internal.ParseAbstractDataObject(Logger, &inputMap, &output, "generic_info_avaliable_settings")
 	return &output
 }
 
 func _ParseAdvertisedSettings(input string) *AvaliableSettings {
 	var output AvaliableSettings
-	inputMap := internal.ParseAbstractColonData(input, "Advertised ", false)
-	internal.ParseAbstractDataObject(&inputMap, &output, "generic_info_avaliable_settings")
+	inputMap := internal.ParseAbstractColonData(Logger, input, "Advertised ", false)
+	internal.ParseAbstractDataObject(Logger, &inputMap, &output, "generic_info_avaliable_settings")
 	return &output
 }
 
 func _ParseSettings(input string) *Settings {
 	var output Settings
-	inputMap := internal.ParseAbstractColonData(input, "", true)
-	internal.ParseAbstractDataObject(&inputMap, &output, "generic_info_settings")
+	inputMap := internal.ParseAbstractColonData(Logger, input, "", true)
+	internal.ParseAbstractDataObject(Logger, &inputMap, &output, "generic_info_settings")
 	return &output
 }
 
 func ParseInfo(rawInfo string, config *CollectConfig) *GenericInfo {
-	slog.SetLogLoggerLevel(internal.GetLogLevel())
+	loggerLever := internal.GetLogLevel()
+	Logger = slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: loggerLever}))
 
 	if rawInfo == "" {
-		slog.Info("Module got empty ethtool data, skipping", "module", "generic_info")
+		Logger.Info("Module got empty ethtool data, skipping", "module", "generic_info")
 		return nil
 	}
 
