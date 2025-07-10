@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.4](https://github.com/newrushbolt/go-ethtool-metrics/compare/v0.0.3...v0.0.4) (2025-07-10)
+
+
+### Bug Fixes
+
+* use separate-logger ([c978b08](https://github.com/newrushbolt/go-ethtool-metrics/commit/c978b081161cbc69b812eb5affbf6a1e87553f3b))
+
 ## [0.0.3](https://github.com/newrushbolt/go-ethtool-metrics/compare/v0.0.2...v0.0.3) (2025-07-05)
 
 
