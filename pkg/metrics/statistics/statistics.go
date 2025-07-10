@@ -3,6 +3,7 @@ package statistics
 
 import (
 	"log/slog"
+	"os"
 	"regexp"
 	"strconv"
 
@@ -20,6 +21,10 @@ type queuedMetrics map[int]map[string]string
 // ./testdata/broadcom/bnxt_en/00_sfp_10gsr85/src/statistics:16:		[0]: tx_mcast_bytes: 86
 // ./testdata/broadcom/bnxt_en/00_sfp_10gsr85/src/statistics:17:		[0]: tx_bcast_bytes: 0
 // ./testdata/broadcom/bnxt_en/00_sfp_10gsr85/src/statistics:19:		[0]: tpa_bytes:      94005443409
+
+var (
+	Logger *slog.Logger
+)
 
 func compileQueuedRegexps(rawQueuedRegexps map[string][]string) map[string][]*regexp.Regexp {
 	queuedRegexps := make(map[string][]*regexp.Regexp, len(rawQueuedRegexps))
@@ -80,10 +85,10 @@ func extractQueuedMetricsV2(srcMetrics map[string]string) queuedMetrics {
 					continue
 				}
 				if regexpMatched {
-					slog.Error("Queued metric has more than one match, some regexps are overlapping", "metric", srcMetricName, "patternRegexp", metricRegexp.String(), "pattern", metricRegexpName)
+					Logger.Error("Queued metric has more than one match, some regexps are overlapping", "metric", srcMetricName, "patternRegexp", metricRegexp.String(), "pattern", metricRegexpName)
 				}
 				regexpMatched = true
-				slog.Debug("Metric matches pattern", "metric", srcMetricName, "patternRegexp", metricRegexp.String(), "pattern", metricRegexpName)
+				Logger.Debug("Metric matches pattern", "metric", srcMetricName, "patternRegexp", metricRegexp.String(), "pattern", metricRegexpName)
 				// TODO: check if only one result matched
 				// switch len(matchedMetricRegexp){
 				// case 1:
@@ -93,7 +98,7 @@ func extractQueuedMetricsV2(srcMetrics map[string]string) queuedMetrics {
 				metricIndexString := matchedMetricRegexp[0][1]
 				metricIndex64, _ := strconv.ParseInt(metricIndexString, 10, 64)
 				metricIndex := int(metricIndex64)
-				slog.Debug("Metric has index", "metric", srcMetricName, "index", metricIndex)
+				Logger.Debug("Metric has index", "metric", srcMetricName, "index", metricIndex)
 
 				currentIndexMap := queuedMetricsMap[metricIndex]
 				if currentIndexMap == nil {
@@ -115,22 +120,23 @@ func parseQueuedInfo(statisticsMap map[string]string) *PerQueueStatistics {
 	perQueueStatistics := make(PerQueueStatistics, len(allQueuedMetrics))
 	for queue, queueMetricsMap := range allQueuedMetrics {
 		var queueStatistics QueueStatistics
-		internal.ParseAbstractDataObject(&queueMetricsMap, &queueStatistics, "queue_statistics")
+		internal.ParseAbstractDataObject(Logger, &queueMetricsMap, &queueStatistics, "queue_statistics")
 		perQueueStatistics[queue] = queueStatistics
 	}
 	return &perQueueStatistics
 }
 
 func ParseInfo(rawInfo string, config *CollectConfig) *StatisticsInfo {
-	slog.SetLogLoggerLevel(internal.GetLogLevel())
+	loggerLever := internal.GetLogLevel()
+	Logger = slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: loggerLever}))
 
 	if rawInfo == "" {
-		slog.Info("Module got empty ethtool data, skipping", "module", "Statistics")
+		Logger.Info("Module got empty ethtool data, skipping", "module", "Statistics")
 		return nil
 	}
 
 	statistics := StatisticsInfo{}
-	generalStatisticsMap := internal.ParseAbstractColonData(rawInfo, "", true)
+	generalStatisticsMap := internal.ParseAbstractColonData(Logger, rawInfo, "", true)
 
 	if config.PerQueue {
 		statistics.PerQueue = parseQueuedInfo(generalStatisticsMap)
@@ -138,7 +144,7 @@ func ParseInfo(rawInfo string, config *CollectConfig) *StatisticsInfo {
 
 	if config.General {
 		var generalStatistics GeneralStatistics
-		internal.ParseAbstractDataObject(&generalStatisticsMap, &generalStatistics, "general_statistics")
+		internal.ParseAbstractDataObject(Logger, &generalStatisticsMap, &generalStatistics, "general_statistics")
 		statistics.General = &generalStatistics
 	}
 	return &statistics

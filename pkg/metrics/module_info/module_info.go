@@ -3,40 +3,47 @@ package module_info
 
 import (
 	"log/slog"
+	"os"
 
 	"github.com/newrushbolt/go-ethtool-metrics/internal"
 )
 
+var (
+	Logger *slog.Logger
+)
+
 func _ParseVendorInfo(rawInfo string) *VendorInfo {
 	var vendorInfo VendorInfo
-	vendorInfoMap := internal.ParseAbstractColonData(rawInfo, "Vendor", false)
-	internal.ParseAbstractDataObject(&vendorInfoMap, &vendorInfo, "vendor")
+	vendorInfoMap := internal.ParseAbstractColonData(Logger, rawInfo, "Vendor", false)
+	internal.ParseAbstractDataObject(Logger, &vendorInfoMap, &vendorInfo, "vendor")
 	return &vendorInfo
 }
 
 func _ParseDiagnosticsValues(rawInfo string) *DiagnosticsValues {
 	var diagnosticsValues DiagnosticsValues
-	diagnosticsValuesMap := internal.ParseAbstractColonData(rawInfo, "", false)
-	internal.ParseAbstractDataObject(&diagnosticsValuesMap, &diagnosticsValues, "diag_values")
+	diagnosticsValuesMap := internal.ParseAbstractColonData(Logger, rawInfo, "", false)
+	internal.ParseAbstractDataObject(Logger, &diagnosticsValuesMap, &diagnosticsValues, "diag_values")
 	return &diagnosticsValues
 }
 
 func _ParseDiagnosticsAlarms(rawInfo string) *DiagnosticsAlarms {
 	var diagnosticsAlarms DiagnosticsAlarms
-	diagnosticsAlarmsMap := internal.ParseAbstractColonData(rawInfo, "", false)
-	internal.ParseAbstractDataObject(&diagnosticsAlarmsMap, &diagnosticsAlarms, "diag_alarms")
+	diagnosticsAlarmsMap := internal.ParseAbstractColonData(Logger, rawInfo, "", false)
+	internal.ParseAbstractDataObject(Logger, &diagnosticsAlarmsMap, &diagnosticsAlarms, "diag_alarms")
 	return &diagnosticsAlarms
 }
 
 func _ParseDiagnosticsWarnings(rawInfo string) *DiagnosticsWarnings {
 	var diagnosticsWarnings DiagnosticsWarnings
-	diagnosticsWarningsMap := internal.ParseAbstractColonData(rawInfo, "", false)
-	internal.ParseAbstractDataObject(&diagnosticsWarningsMap, &diagnosticsWarnings, "diag_warnings")
+	diagnosticsWarningsMap := internal.ParseAbstractColonData(Logger, rawInfo, "", false)
+	internal.ParseAbstractDataObject(Logger, &diagnosticsWarningsMap, &diagnosticsWarnings, "diag_warnings")
 	return &diagnosticsWarnings
 }
 
 func ParseInfo(rawInfo string, config *CollectConfig) *ModuleInfo {
-	slog.SetLogLoggerLevel(internal.GetLogLevel())
+	loggerLever := internal.GetLogLevel()
+	Logger = slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: loggerLever}))
+
 	// Empty string means we got an error getting raw info from ethtool
 	// This is pretty common for module info `ethtool -m ethX`
 	//
@@ -44,7 +51,7 @@ func ParseInfo(rawInfo string, config *CollectConfig) *ModuleInfo {
 	// Maybe we should look into the common info `ethtool ethX`
 	// and decide whether we should even try to get module info
 	if rawInfo == "" {
-		slog.Info("Module got empty ethtool data, skipping", "module", "ModuleInfo")
+		Logger.Info("Module got empty ethtool data, skipping", "module", "ModuleInfo")
 		return nil
 	}
 

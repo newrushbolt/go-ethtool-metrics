@@ -9,13 +9,17 @@ import (
 	"strings"
 )
 
+var (
+	Logger *slog.Logger
+)
+
 func parseFloat64(input string) float64 {
 	floatRegex := regexp.MustCompile(`[+\-]?\d+(\.\d+)?`)
 	floatString := floatRegex.FindString(input)
 	float, err := strconv.ParseFloat(floatString, 64)
 	if err != nil {
 		// TODO: consistent logging levels
-		slog.Warn("Cannot parse string to float", "err", err, "string", input)
+		Logger.Warn("Cannot parse string to float", "err", err, "string", input)
 	}
 	return float
 }
@@ -56,13 +60,15 @@ func parseSlice(input string) []string {
 // - bool
 // - slice
 // - struct
-func ParseAbstractDataObject(data *map[string]string, obj any, tagName string) {
+func ParseAbstractDataObject(logger *slog.Logger, data *map[string]string, obj any, tagName string) {
+	Logger = logger
+
 	objValue := reflect.ValueOf(obj).Elem()
 	objType := objValue.Type()
 	for key, value := range *data {
 		if objType.Kind() == reflect.Pointer {
 			// TODO: consistent logging levels
-			slog.Warn("Skipping field because it's pointer. Something is probably broken in this data structure", "fieldName", key)
+			Logger.Warn("Skipping field because it's pointer. Something is probably broken in this data structure", "fieldName", key)
 			continue
 		}
 		for fieldIndex := range objValue.NumField() {
@@ -94,7 +100,7 @@ func ParseAbstractDataObject(data *map[string]string, obj any, tagName string) {
 						realFieldType := fieldObjType.Type.Elem()
 						if realFieldType.Kind() != reflect.Float64 {
 							// TODO: consistent logging levels
-							slog.Warn("Skipping field since only pointers to type float64 are supported", "field", fieldObjType.Name, "type", realFieldType.Kind())
+							Logger.Warn("Skipping field since only pointers to type float64 are supported", "field", fieldObjType.Name, "type", realFieldType.Kind())
 							continue
 						}
 						floatObj := parseFloat64(value)
@@ -105,7 +111,7 @@ func ParseAbstractDataObject(data *map[string]string, obj any, tagName string) {
 						fieldObj.Set(reflect.ValueOf(parseSlice(value)))
 					default:
 						// TODO: consistent logging levels
-						slog.Warn("Got unsupported data type in field", "field", key, "type", fieldObj.Kind())
+						Logger.Warn("Got unsupported data type in field", "field", key, "type", fieldObj.Kind())
 					}
 				}
 			}
@@ -113,10 +119,12 @@ func ParseAbstractDataObject(data *map[string]string, obj any, tagName string) {
 	}
 }
 
-func ParseAbstractColonData(data string, prefix string, keepPrefix bool) map[string]string {
-	parsed_data := make(map[string]string)
+func ParseAbstractColonData(logger *slog.Logger, data string, prefix string, keepPrefix bool) map[string]string {
+	Logger = logger
 
+	parsed_data := make(map[string]string)
 	lines := make(map[int]string)
+
 	rawLines := strings.Split(data, "\n")
 	for lineIndex, line := range rawLines {
 		if line == "" {
@@ -153,7 +161,7 @@ func ParseAbstractColonData(data string, prefix string, keepPrefix bool) map[str
 		splittedLineLength := len(splittedLine)
 		// TODO: better logic for splitting lines
 		if !(splittedLineLength == 2 || splittedLineLength == 3) {
-			slog.Debug("Splitted line has invalid amount of parts", "line", line, "splitted_line", splittedLine)
+			Logger.Debug("Splitted line has invalid amount of parts", "line", line, "splitted_line", splittedLine)
 			continue
 		}
 		key := strings.TrimSpace(splittedLine[0])
