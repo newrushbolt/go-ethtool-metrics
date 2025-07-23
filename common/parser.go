@@ -5,6 +5,7 @@ import (
 	"log/slog"
 	"os"
 	"reflect"
+	"regexp"
 	"strconv"
 	"strings"
 	"unicode"
@@ -21,29 +22,13 @@ func init() {
 	Logger = slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: loggerLever}))
 }
 
+// Parses and returns the first float found in string
+// Scientific notations are not supported
 func parseFloat64(input string) float64 {
-	// Sometime values are doubled in several units, like this
-	// 0.8224 mW / -0.85 dBm
-	// Taking only first value
-	firstInputPart := strings.Split(input, "/")[0]
-	var sb strings.Builder
-	hasDot := false
-	hasMinus := false
+	floatRegex := regexp.MustCompile(`[+\-]?\d+(\.\d+)?`)
+	floatString := floatRegex.FindString(input)
 
-	for i, r := range firstInputPart {
-		switch {
-		case unicode.IsDigit(r):
-			sb.WriteRune(r)
-		case r == '.' && !hasDot:
-			sb.WriteRune(r)
-			hasDot = true
-		case r == '-' && i == 0 && !hasMinus:
-			sb.WriteRune(r)
-			hasMinus = true
-		}
-	}
-
-	float, err := strconv.ParseFloat(sb.String(), 64)
+	float, err := strconv.ParseFloat(floatString, 64)
 	if err != nil {
 		// TODO: consistent logging levels
 		Logger.Warn("Cannot parse string to float", "err", err, "string", input)
@@ -51,6 +36,9 @@ func parseFloat64(input string) float64 {
 	return float
 }
 
+// Parses and returns the bool, using YAML loose convertion
+// Read more on what's valid bool in yaml here
+// https://github.com/go-yaml/yaml/blob/v3.0.1/decode.go#L678
 func parseBool(input string) bool {
 	var result bool
 	err := yaml.Unmarshal([]byte(input), &result)
@@ -61,20 +49,16 @@ func parseBool(input string) bool {
 }
 
 func parseSlice(input string) []string {
-	output := []string{}
-
-	// TODO: replace with better way to replace all whitespace chars to single space
-	cleanLine := strings.ReplaceAll(input, "\n", " ")
-	cleanLine = strings.ReplaceAll(cleanLine, "\t", " ")
-	cleanLine = strings.ReplaceAll(cleanLine, ",", " ")
-
-	input_columns := strings.Split(cleanLine, " ")
-	for _, column := range input_columns {
-		if column != "" {
-			clean_column := strings.TrimSpace(column)
-			output = append(output, clean_column)
-		}
+	splitFunc := func(c rune) bool {
+		return unicode.IsSpace(c) || c == ','
 	}
+	output := strings.FieldsFunc(input, splitFunc)
+	// // Shippet for cleaning excess items from slice
+	// deleteFunc := func (s string) bool {
+	// 	return true
+	// }
+	// slices.DeleteFunc()output
+
 	return output
 }
 
