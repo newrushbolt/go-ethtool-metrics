@@ -16,6 +16,11 @@ var (
 	Logger *slog.Logger
 )
 
+func init() {
+	loggerLever := common.GetLogLevel()
+	Logger = slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: loggerLever}))
+}
+
 func _DropHeaderLine(input string) string {
 	secondLineIndex := strings.Index(input, "\n")
 	if (strings.HasPrefix(input, "Settings for ")) && (secondLineIndex > 0) {
@@ -60,22 +65,22 @@ func _GetPortSpeedBytes(input string) (speedBytes float64) {
 
 func _ParseSupportedSettings(input string) *AvaliableSettings {
 	var output AvaliableSettings
-	inputMap := common.ParseAbstractColonData(Logger, input, "Supported ", false)
-	common.ParseAbstractDataObject(Logger, &inputMap, &output, "generic_info_avaliable_settings")
+	inputMap := common.ParseAbstractColonData(input, "Supported ", false)
+	common.ParseAbstractDataObject(&inputMap, &output, "generic_info_avaliable_settings")
 	return &output
 }
 
 func _ParseAdvertisedSettings(input string) *AvaliableSettings {
 	var output AvaliableSettings
-	inputMap := common.ParseAbstractColonData(Logger, input, "Advertised ", false)
-	common.ParseAbstractDataObject(Logger, &inputMap, &output, "generic_info_avaliable_settings")
+	inputMap := common.ParseAbstractColonData(input, "Advertised ", false)
+	common.ParseAbstractDataObject(&inputMap, &output, "generic_info_avaliable_settings")
 	return &output
 }
 
 func _ParseSettings(input string) *Settings {
 	var output Settings
-	inputMap := common.ParseAbstractColonData(Logger, input, "", true)
-	common.ParseAbstractDataObject(Logger, &inputMap, &output, "generic_info_settings")
+	inputMap := common.ParseAbstractColonData(input, "", true)
+	common.ParseAbstractDataObject(&inputMap, &output, "generic_info_settings")
 	return &output
 }
 

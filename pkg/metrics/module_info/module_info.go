@@ -12,31 +12,36 @@ var (
 	Logger *slog.Logger
 )
 
+func init() {
+	loggerLever := common.GetLogLevel()
+	Logger = slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: loggerLever}))
+}
+
 func _ParseVendorInfo(rawInfo string) *VendorInfo {
 	var vendorInfo VendorInfo
-	vendorInfoMap := common.ParseAbstractColonData(Logger, rawInfo, "Vendor", false)
-	common.ParseAbstractDataObject(Logger, &vendorInfoMap, &vendorInfo, "vendor")
+	vendorInfoMap := common.ParseAbstractColonData(rawInfo, "Vendor", false)
+	common.ParseAbstractDataObject(&vendorInfoMap, &vendorInfo, "vendor")
 	return &vendorInfo
 }
 
 func _ParseDiagnosticsValues(rawInfo string) *DiagnosticsValues {
 	var diagnosticsValues DiagnosticsValues
-	diagnosticsValuesMap := common.ParseAbstractColonData(Logger, rawInfo, "", false)
-	common.ParseAbstractDataObject(Logger, &diagnosticsValuesMap, &diagnosticsValues, "diag_values")
+	diagnosticsValuesMap := common.ParseAbstractColonData(rawInfo, "", false)
+	common.ParseAbstractDataObject(&diagnosticsValuesMap, &diagnosticsValues, "diag_values")
 	return &diagnosticsValues
 }
 
 func _ParseDiagnosticsAlarms(rawInfo string) *DiagnosticsAlarms {
 	var diagnosticsAlarms DiagnosticsAlarms
-	diagnosticsAlarmsMap := common.ParseAbstractColonData(Logger, rawInfo, "", false)
-	common.ParseAbstractDataObject(Logger, &diagnosticsAlarmsMap, &diagnosticsAlarms, "diag_alarms")
+	diagnosticsAlarmsMap := common.ParseAbstractColonData(rawInfo, "", false)
+	common.ParseAbstractDataObject(&diagnosticsAlarmsMap, &diagnosticsAlarms, "diag_alarms")
 	return &diagnosticsAlarms
 }
 
 func _ParseDiagnosticsWarnings(rawInfo string) *DiagnosticsWarnings {
 	var diagnosticsWarnings DiagnosticsWarnings
-	diagnosticsWarningsMap := common.ParseAbstractColonData(Logger, rawInfo, "", false)
-	common.ParseAbstractDataObject(Logger, &diagnosticsWarningsMap, &diagnosticsWarnings, "diag_warnings")
+	diagnosticsWarningsMap := common.ParseAbstractColonData(rawInfo, "", false)
+	common.ParseAbstractDataObject(&diagnosticsWarningsMap, &diagnosticsWarnings, "diag_warnings")
 	return &diagnosticsWarnings
 }
 

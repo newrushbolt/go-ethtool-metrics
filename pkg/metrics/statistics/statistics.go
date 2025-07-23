@@ -26,6 +26,11 @@ var (
 	Logger *slog.Logger
 )
 
+func init() {
+	loggerLever := common.GetLogLevel()
+	Logger = slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: loggerLever}))
+}
+
 func compileQueuedRegexps(rawQueuedRegexps map[string][]string) map[string][]*regexp.Regexp {
 	queuedRegexps := make(map[string][]*regexp.Regexp, len(rawQueuedRegexps))
 	for regexName, regexStrings := range rawQueuedRegexps {
@@ -120,7 +125,7 @@ func parseQueuedInfo(statisticsMap map[string]string) *PerQueueStatistics {
 	perQueueStatistics := make(PerQueueStatistics, len(allQueuedMetrics))
 	for queue, queueMetricsMap := range allQueuedMetrics {
 		var queueStatistics QueueStatistics
-		common.ParseAbstractDataObject(Logger, &queueMetricsMap, &queueStatistics, "queue_statistics")
+		common.ParseAbstractDataObject(&queueMetricsMap, &queueStatistics, "queue_statistics")
 		perQueueStatistics[queue] = queueStatistics
 	}
 	return &perQueueStatistics
@@ -136,7 +141,7 @@ func ParseInfo(rawInfo string, config *CollectConfig) *StatisticsInfo {
 	}
 
 	statistics := StatisticsInfo{}
-	generalStatisticsMap := common.ParseAbstractColonData(Logger, rawInfo, "", true)
+	generalStatisticsMap := common.ParseAbstractColonData(rawInfo, "", true)
 
 	if config.PerQueue {
 		statistics.PerQueue = parseQueuedInfo(generalStatisticsMap)
@@ -144,7 +149,7 @@ func ParseInfo(rawInfo string, config *CollectConfig) *StatisticsInfo {
 
 	if config.General {
 		var generalStatistics GeneralStatistics
-		common.ParseAbstractDataObject(Logger, &generalStatisticsMap, &generalStatistics, "general_statistics")
+		common.ParseAbstractDataObject(&generalStatisticsMap, &generalStatistics, "general_statistics")
 		statistics.General = &generalStatistics
 	}
 	return &statistics
