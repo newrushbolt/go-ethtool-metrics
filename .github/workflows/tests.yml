@@ -11,7 +11,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  COVERAGE_THRESHOLD: 91.7
+  COVERAGE_THRESHOLD: 91.9
 
 jobs:
   test_go:
@@ -22,7 +22,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4.2.2
       - name: Run tests
-        run: go test ./... -coverpkg=newrushbolt/go-ethtool-metrics/... -coverprofile coverage.out
+        run: go test ./... -coverpkg=github.com/newrushbolt/go-ethtool-metrics/... -coverprofile coverage.out
 
       - name: Get coverage filtering package
         run: go install github.com/quantumcycle/go-ignore-cov@v0.6.1
