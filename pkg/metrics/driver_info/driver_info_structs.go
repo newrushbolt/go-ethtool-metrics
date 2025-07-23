@@ -1,22 +1,28 @@
 package driver_info
 
 type CollectConfig struct {
-	DriverFeatures bool
+	CollectCommon   bool
+	CollectFeatures bool
 }
 
 func (config CollectConfig) Default() *CollectConfig {
 	return &CollectConfig{
-		DriverFeatures: false,
+		CollectCommon:   true,
+		CollectFeatures: false,
 	}
 }
 
 type DriverInfo struct {
+	Common   *DriverInfoCommon
+	Features *DriverFeatures
+}
+
+type DriverInfoCommon struct {
 	DriverName           string   `driver:"driver"`
 	DriverVersion        string   `driver:"version"`
 	FirmwareVersion      string   `driver:"firmware-version"`
 	FirmwareVersionParts []string `driver:"firmware-version"`
 	BusAddress           string   `driver:"bus-info"`
-	Features             *DriverFeatures
 }
 
 type DriverFeatures struct {

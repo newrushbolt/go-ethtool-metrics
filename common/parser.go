@@ -119,16 +119,20 @@ func ParseAbstractDataObject(logger *slog.Logger, data *map[string]string, obj a
 					// Direct float values
 					case reflect.Float64:
 						fieldObj.SetFloat(parseFloat64(value))
-					// Indirect float values, using pointer, and allowing for Nan-values
+					// Indirect values, using pointer
 					case reflect.Pointer:
 						realFieldType := fieldObjType.Type.Elem()
-						if realFieldType.Kind() != reflect.Float64 {
+						switch realFieldType.Kind() {
+						// ATM looks like it only makes sense to nil-fy floats,
+						// since empty strings in prometheus labels are treated as missing
+						case reflect.Float64:
+							floatObj := parseFloat64(value)
+							fieldObj.Set(reflect.ValueOf(&floatObj))
+						default:
 							// TODO: consistent logging levels
 							Logger.Warn("Skipping field since only pointers to type float64 are supported", "field", fieldObjType.Name, "type", realFieldType.Kind())
 							continue
 						}
-						floatObj := parseFloat64(value)
-						fieldObj.Set(reflect.ValueOf(&floatObj))
 					case reflect.Bool:
 						fieldObj.SetBool(parseBool(value))
 					case reflect.Slice:

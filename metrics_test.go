@@ -104,7 +104,8 @@ func TestDriverInfoFull(t *testing.T) {
 		t.Run(fixture, func(t *testing.T) {
 			srcFile, resultFile := ReadFixturePair(fixture, testModule, "full")
 			config := driver_info.CollectConfig{
-				DriverFeatures: true,
+				CollectFeatures: true,
+				CollectCommon:   true,
 			}
 			info := driver_info.ParseInfo(srcFile, &config)
 			infoJson, err := json.MarshalIndent(info, "", "    ")

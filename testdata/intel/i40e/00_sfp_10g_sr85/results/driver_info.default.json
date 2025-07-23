@@ -1,12 +1,14 @@
 {
-    "DriverName": "i40e",
-    "DriverVersion": "4.18.0-448.el8.x86_64",
-    "FirmwareVersion": "8.60 0x8000bd5d 1.3140.0",
-    "FirmwareVersionParts": [
-        "8.60",
-        "0x8000bd5d",
-        "1.3140.0"
-    ],
-    "BusAddress": "0000:3b:00.1",
+    "Common": {
+        "DriverName": "i40e",
+        "DriverVersion": "4.18.0-448.el8.x86_64",
+        "FirmwareVersion": "8.60 0x8000bd5d 1.3140.0",
+        "FirmwareVersionParts": [
+            "8.60",
+            "0x8000bd5d",
+            "1.3140.0"
+        ],
+        "BusAddress": "0000:3b:00.1"
+    },
     "Features": null
 }

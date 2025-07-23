@@ -12,6 +12,20 @@ var (
 	Logger *slog.Logger
 )
 
+func parseCommonInfo(input string) *DriverInfoCommon {
+	var output DriverInfoCommon
+	inputMap := common.ParseAbstractColonData(Logger, input, "", true)
+	common.ParseAbstractDataObject(Logger, &inputMap, &output, "driver")
+	return &output
+}
+
+func parseFeatures(input string) *DriverFeatures {
+	var output DriverFeatures
+	inputMap := common.ParseAbstractColonData(Logger, input, "", true)
+	common.ParseAbstractDataObject(Logger, &inputMap, &output, "driver_supports")
+	return &output
+}
+
 func ParseInfo(rawInfo string, config *CollectConfig) *DriverInfo {
 	loggerLever := common.GetLogLevel()
 	Logger = slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: loggerLever}))
@@ -21,14 +35,19 @@ func ParseInfo(rawInfo string, config *CollectConfig) *DriverInfo {
 		return nil
 	}
 
-	deviceInfoMap := common.ParseAbstractColonData(Logger, rawInfo, "", true)
-	var device_info DriverInfo
-	common.ParseAbstractDataObject(Logger, &deviceInfoMap, &device_info, "driver")
-
-	if config.DriverFeatures {
-		var features DriverFeatures
-		common.ParseAbstractDataObject(Logger, &deviceInfoMap, &features, "driver_supports")
-		device_info.Features = &features
+	var driverInfoCommon *DriverInfoCommon
+	if config.CollectCommon {
+		driverInfoCommon = parseCommonInfo(rawInfo)
 	}
-	return &device_info
+
+	var driverFeatures *DriverFeatures
+	if config.CollectFeatures {
+		driverFeatures = parseFeatures(rawInfo)
+	}
+
+	driverInfo := DriverInfo{
+		Common:   driverInfoCommon,
+		Features: driverFeatures,
+	}
+	return &driverInfo
 }
