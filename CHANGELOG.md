@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.0.5](https://github.com/newrushbolt/go-ethtool-metrics/compare/v0.0.4...v0.0.5) (2025-07-23)
+
+
+### Bug Fixes
+
+* add coverage threshold, better parsers for simple types ([95ea966](https://github.com/newrushbolt/go-ethtool-metrics/commit/95ea966454a29951fee3e220aee7a61fa43bef45))
+* better collect options for driver_info ([2fae2ca](https://github.com/newrushbolt/go-ethtool-metrics/commit/2fae2ca09e8e8ac56373e4534d379e049f3014a0))
+* better slices parse ([c7a5c3d](https://github.com/newrushbolt/go-ethtool-metrics/commit/c7a5c3d090b684d0ab8117eb2880693530b4044a))
+* revert to global logger ([9c08c1e](https://github.com/newrushbolt/go-ethtool-metrics/commit/9c08c1e51c94f6764c967e9bfd4ffc7caa52dcb2))
+
+
+### Miscellaneous Chores
+
+* test empty driver_info ([608da33](https://github.com/newrushbolt/go-ethtool-metrics/commit/608da33eeeefc0155d4263fdc2205398bbc059ef))
+
 ## [0.0.4](https://github.com/newrushbolt/go-ethtool-metrics/compare/v0.0.3...v0.0.4) (2025-07-10)
 
 
