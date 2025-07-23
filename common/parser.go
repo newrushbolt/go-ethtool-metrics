@@ -84,9 +84,7 @@ func parseSlice(input string) []string {
 // - bool
 // - slice
 // - struct
-func ParseAbstractDataObject(logger *slog.Logger, data *map[string]string, obj any, tagName string) {
-	Logger = logger
-
+func ParseAbstractDataObject(data *map[string]string, obj any, tagName string) {
 	objValue := reflect.ValueOf(obj).Elem()
 	objType := objValue.Type()
 	for key, value := range *data {
@@ -147,9 +145,7 @@ func ParseAbstractDataObject(logger *slog.Logger, data *map[string]string, obj a
 	}
 }
 
-func ParseAbstractColonData(logger *slog.Logger, data string, prefix string, keepPrefix bool) map[string]string {
-	Logger = logger
-
+func ParseAbstractColonData(data string, prefix string, keepPrefix bool) map[string]string {
 	parsed_data := make(map[string]string)
 	lines := make(map[int]string)
 

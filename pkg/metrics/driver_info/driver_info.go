@@ -12,17 +12,22 @@ var (
 	Logger *slog.Logger
 )
 
+func init() {
+	loggerLever := common.GetLogLevel()
+	Logger = slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: loggerLever}))
+}
+
 func parseCommonInfo(input string) *DriverInfoCommon {
 	var output DriverInfoCommon
-	inputMap := common.ParseAbstractColonData(Logger, input, "", true)
-	common.ParseAbstractDataObject(Logger, &inputMap, &output, "driver")
+	inputMap := common.ParseAbstractColonData(input, "", true)
+	common.ParseAbstractDataObject(&inputMap, &output, "driver")
 	return &output
 }
 
 func parseFeatures(input string) *DriverFeatures {
 	var output DriverFeatures
-	inputMap := common.ParseAbstractColonData(Logger, input, "", true)
-	common.ParseAbstractDataObject(Logger, &inputMap, &output, "driver_supports")
+	inputMap := common.ParseAbstractColonData(input, "", true)
+	common.ParseAbstractDataObject(&inputMap, &output, "driver_supports")
 	return &output
 }
 
