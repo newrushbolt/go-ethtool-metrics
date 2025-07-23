@@ -15,8 +15,8 @@ import (
 )
 
 func ReadFixturePair(fixtureName string, ethtoolMode string, settingsMode string) (src string, result string) {
-	fixtureSourcePath := fmt.Sprintf("testdata/%s/src/%s", fixtureName, ethtoolMode)
-	fixtureResultPath := fmt.Sprintf("testdata/%s/results/%s.%s.json", fixtureName, ethtoolMode, settingsMode)
+	fixtureSourcePath := fmt.Sprintf("../testdata/%s/src/%s", fixtureName, ethtoolMode)
+	fixtureResultPath := fmt.Sprintf("../testdata/%s/results/%s.%s.json", fixtureName, ethtoolMode, settingsMode)
 
 	fixtureSourceData, err := os.ReadFile(fixtureSourcePath)
 	// Allow missing source
