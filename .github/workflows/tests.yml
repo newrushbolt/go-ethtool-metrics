@@ -11,7 +11,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  COVERAGE_THRESHOLD: 90
+  COVERAGE_THRESHOLD: 92
 
 jobs:
   test_go:

@@ -1,13 +1,15 @@
 {
-    "DriverName": "ice",
-    "DriverVersion": "4.18.0-536.el8.x86_64",
-    "FirmwareVersion": "4.40 0x8001ba1d 22.5.7",
-    "FirmwareVersionParts": [
-        "4.40",
-        "0x8001ba1d",
-        "22.5.7"
-    ],
-    "BusAddress": "0000:22:00.3",
+    "Common": {
+        "DriverName": "ice",
+        "DriverVersion": "4.18.0-536.el8.x86_64",
+        "FirmwareVersion": "4.40 0x8001ba1d 22.5.7",
+        "FirmwareVersionParts": [
+            "4.40",
+            "0x8001ba1d",
+            "22.5.7"
+        ],
+        "BusAddress": "0000:22:00.3"
+    },
     "Features": {
         "EepromAccess": true,
         "PrivFlags": true,
