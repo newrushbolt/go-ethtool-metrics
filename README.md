@@ -82,3 +82,5 @@ Suggested behavior for exporter is to drop all metrics with `*float64 nil`, howe
 Since library is split to modules, there's no centralized logger.  
 However, every module gets it's own slog.Logger on start, and you can set preferred logging level using `GO_ETHTOOL_METRICS_LOG_LEVEL` env.  
 Check the possible values [in slog library](https://cs.opensource.google/go/go/+/refs/tags/go1.24.3:src/log/slog/level.go;drc=6d7760cb4292bd156193fb2a3e377f24637f8795;l=67).
+
+go test ./... -coverpkg=newrushbolt/go-ethtool-metrics/... -coverprofile coverage.out -covermode count

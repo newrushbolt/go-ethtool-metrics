@@ -7,7 +7,7 @@ import (
 	"regexp"
 	"strconv"
 
-	"github.com/newrushbolt/go-ethtool-metrics/internal"
+	"github.com/newrushbolt/go-ethtool-metrics/common"
 )
 
 type queuedMetrics map[int]map[string]string
@@ -39,7 +39,7 @@ func compileQueuedRegexps(rawQueuedRegexps map[string][]string) map[string][]*re
 	return queuedRegexps
 }
 
-func extractQueuedMetricsV2(srcMetrics map[string]string) queuedMetrics {
+func extractQueuedMetrics(srcMetrics map[string]string) queuedMetrics {
 	rawQueuedRegexps := map[string][]string{
 		"rx_bytes": {
 			"rx-([0-9]+).bytes",
@@ -116,18 +116,18 @@ func extractQueuedMetricsV2(srcMetrics map[string]string) queuedMetrics {
 }
 
 func parseQueuedInfo(statisticsMap map[string]string) *PerQueueStatistics {
-	allQueuedMetrics := extractQueuedMetricsV2(statisticsMap)
+	allQueuedMetrics := extractQueuedMetrics(statisticsMap)
 	perQueueStatistics := make(PerQueueStatistics, len(allQueuedMetrics))
 	for queue, queueMetricsMap := range allQueuedMetrics {
 		var queueStatistics QueueStatistics
-		internal.ParseAbstractDataObject(Logger, &queueMetricsMap, &queueStatistics, "queue_statistics")
+		common.ParseAbstractDataObject(Logger, &queueMetricsMap, &queueStatistics, "queue_statistics")
 		perQueueStatistics[queue] = queueStatistics
 	}
 	return &perQueueStatistics
 }
 
 func ParseInfo(rawInfo string, config *CollectConfig) *StatisticsInfo {
-	loggerLever := internal.GetLogLevel()
+	loggerLever := common.GetLogLevel()
 	Logger = slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: loggerLever}))
 
 	if rawInfo == "" {
@@ -136,7 +136,7 @@ func ParseInfo(rawInfo string, config *CollectConfig) *StatisticsInfo {
 	}
 
 	statistics := StatisticsInfo{}
-	generalStatisticsMap := internal.ParseAbstractColonData(Logger, rawInfo, "", true)
+	generalStatisticsMap := common.ParseAbstractColonData(Logger, rawInfo, "", true)
 
 	if config.PerQueue {
 		statistics.PerQueue = parseQueuedInfo(generalStatisticsMap)
@@ -144,7 +144,7 @@ func ParseInfo(rawInfo string, config *CollectConfig) *StatisticsInfo {
 
 	if config.General {
 		var generalStatistics GeneralStatistics
-		internal.ParseAbstractDataObject(Logger, &generalStatisticsMap, &generalStatistics, "general_statistics")
+		common.ParseAbstractDataObject(Logger, &generalStatisticsMap, &generalStatistics, "general_statistics")
 		statistics.General = &generalStatistics
 	}
 	return &statistics

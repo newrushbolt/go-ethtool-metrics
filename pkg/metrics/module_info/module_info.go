@@ -5,7 +5,7 @@ import (
 	"log/slog"
 	"os"
 
-	"github.com/newrushbolt/go-ethtool-metrics/internal"
+	"github.com/newrushbolt/go-ethtool-metrics/common"
 )
 
 var (
@@ -14,34 +14,34 @@ var (
 
 func _ParseVendorInfo(rawInfo string) *VendorInfo {
 	var vendorInfo VendorInfo
-	vendorInfoMap := internal.ParseAbstractColonData(Logger, rawInfo, "Vendor", false)
-	internal.ParseAbstractDataObject(Logger, &vendorInfoMap, &vendorInfo, "vendor")
+	vendorInfoMap := common.ParseAbstractColonData(Logger, rawInfo, "Vendor", false)
+	common.ParseAbstractDataObject(Logger, &vendorInfoMap, &vendorInfo, "vendor")
 	return &vendorInfo
 }
 
 func _ParseDiagnosticsValues(rawInfo string) *DiagnosticsValues {
 	var diagnosticsValues DiagnosticsValues
-	diagnosticsValuesMap := internal.ParseAbstractColonData(Logger, rawInfo, "", false)
-	internal.ParseAbstractDataObject(Logger, &diagnosticsValuesMap, &diagnosticsValues, "diag_values")
+	diagnosticsValuesMap := common.ParseAbstractColonData(Logger, rawInfo, "", false)
+	common.ParseAbstractDataObject(Logger, &diagnosticsValuesMap, &diagnosticsValues, "diag_values")
 	return &diagnosticsValues
 }
 
 func _ParseDiagnosticsAlarms(rawInfo string) *DiagnosticsAlarms {
 	var diagnosticsAlarms DiagnosticsAlarms
-	diagnosticsAlarmsMap := internal.ParseAbstractColonData(Logger, rawInfo, "", false)
-	internal.ParseAbstractDataObject(Logger, &diagnosticsAlarmsMap, &diagnosticsAlarms, "diag_alarms")
+	diagnosticsAlarmsMap := common.ParseAbstractColonData(Logger, rawInfo, "", false)
+	common.ParseAbstractDataObject(Logger, &diagnosticsAlarmsMap, &diagnosticsAlarms, "diag_alarms")
 	return &diagnosticsAlarms
 }
 
 func _ParseDiagnosticsWarnings(rawInfo string) *DiagnosticsWarnings {
 	var diagnosticsWarnings DiagnosticsWarnings
-	diagnosticsWarningsMap := internal.ParseAbstractColonData(Logger, rawInfo, "", false)
-	internal.ParseAbstractDataObject(Logger, &diagnosticsWarningsMap, &diagnosticsWarnings, "diag_warnings")
+	diagnosticsWarningsMap := common.ParseAbstractColonData(Logger, rawInfo, "", false)
+	common.ParseAbstractDataObject(Logger, &diagnosticsWarningsMap, &diagnosticsWarnings, "diag_warnings")
 	return &diagnosticsWarnings
 }
 
 func ParseInfo(rawInfo string, config *CollectConfig) *ModuleInfo {
-	loggerLever := internal.GetLogLevel()
+	loggerLever := common.GetLogLevel()
 	Logger = slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: loggerLever}))
 
 	// Empty string means we got an error getting raw info from ethtool

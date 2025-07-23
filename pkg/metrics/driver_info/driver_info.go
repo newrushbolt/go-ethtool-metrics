@@ -5,7 +5,7 @@ import (
 	"log/slog"
 	"os"
 
-	"github.com/newrushbolt/go-ethtool-metrics/internal"
+	"github.com/newrushbolt/go-ethtool-metrics/common"
 )
 
 var (
@@ -13,7 +13,7 @@ var (
 )
 
 func ParseInfo(rawInfo string, config *CollectConfig) *DriverInfo {
-	loggerLever := internal.GetLogLevel()
+	loggerLever := common.GetLogLevel()
 	Logger = slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: loggerLever}))
 
 	if rawInfo == "" {
@@ -21,13 +21,13 @@ func ParseInfo(rawInfo string, config *CollectConfig) *DriverInfo {
 		return nil
 	}
 
-	deviceInfoMap := internal.ParseAbstractColonData(Logger, rawInfo, "", true)
+	deviceInfoMap := common.ParseAbstractColonData(Logger, rawInfo, "", true)
 	var device_info DriverInfo
-	internal.ParseAbstractDataObject(Logger, &deviceInfoMap, &device_info, "driver")
+	common.ParseAbstractDataObject(Logger, &deviceInfoMap, &device_info, "driver")
 
 	if config.DriverFeatures {
 		var features DriverFeatures
-		internal.ParseAbstractDataObject(Logger, &deviceInfoMap, &features, "driver_supports")
+		common.ParseAbstractDataObject(Logger, &deviceInfoMap, &features, "driver_supports")
 		device_info.Features = &features
 	}
 	return &device_info

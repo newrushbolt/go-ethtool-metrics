@@ -9,7 +9,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/newrushbolt/go-ethtool-metrics/internal"
+	"github.com/newrushbolt/go-ethtool-metrics/common"
 )
 
 var (
@@ -60,27 +60,27 @@ func _GetPortSpeedBytes(input string) (speedBytes float64) {
 
 func _ParseSupportedSettings(input string) *AvaliableSettings {
 	var output AvaliableSettings
-	inputMap := internal.ParseAbstractColonData(Logger, input, "Supported ", false)
-	internal.ParseAbstractDataObject(Logger, &inputMap, &output, "generic_info_avaliable_settings")
+	inputMap := common.ParseAbstractColonData(Logger, input, "Supported ", false)
+	common.ParseAbstractDataObject(Logger, &inputMap, &output, "generic_info_avaliable_settings")
 	return &output
 }
 
 func _ParseAdvertisedSettings(input string) *AvaliableSettings {
 	var output AvaliableSettings
-	inputMap := internal.ParseAbstractColonData(Logger, input, "Advertised ", false)
-	internal.ParseAbstractDataObject(Logger, &inputMap, &output, "generic_info_avaliable_settings")
+	inputMap := common.ParseAbstractColonData(Logger, input, "Advertised ", false)
+	common.ParseAbstractDataObject(Logger, &inputMap, &output, "generic_info_avaliable_settings")
 	return &output
 }
 
 func _ParseSettings(input string) *Settings {
 	var output Settings
-	inputMap := internal.ParseAbstractColonData(Logger, input, "", true)
-	internal.ParseAbstractDataObject(Logger, &inputMap, &output, "generic_info_settings")
+	inputMap := common.ParseAbstractColonData(Logger, input, "", true)
+	common.ParseAbstractDataObject(Logger, &inputMap, &output, "generic_info_settings")
 	return &output
 }
 
 func ParseInfo(rawInfo string, config *CollectConfig) *GenericInfo {
-	loggerLever := internal.GetLogLevel()
+	loggerLever := common.GetLogLevel()
 	Logger = slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: loggerLever}))
 
 	if rawInfo == "" {
