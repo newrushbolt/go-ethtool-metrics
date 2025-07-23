@@ -1,4 +1,4 @@
-package metrics_test
+package main
 
 import (
 	"encoding/json"
@@ -10,6 +10,7 @@ import (
 	"github.com/newrushbolt/go-ethtool-metrics/pkg/metrics/generic_info"
 	"github.com/newrushbolt/go-ethtool-metrics/pkg/metrics/module_info"
 	"github.com/newrushbolt/go-ethtool-metrics/pkg/metrics/statistics"
+
 	"github.com/stretchr/testify/assert"
 )
 

@@ -1,22 +1,49 @@
-package internal
+package common
 
 import (
 	"fmt"
 	"log/slog"
+	"os"
 	"reflect"
-	"regexp"
 	"strconv"
 	"strings"
+	"unicode"
+
+	"gopkg.in/yaml.v3"
 )
 
 var (
 	Logger *slog.Logger
 )
 
+func init() {
+	loggerLever := GetLogLevel()
+	Logger = slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: loggerLever}))
+}
+
 func parseFloat64(input string) float64 {
-	floatRegex := regexp.MustCompile(`[+\-]?\d+(\.\d+)?`)
-	floatString := floatRegex.FindString(input)
-	float, err := strconv.ParseFloat(floatString, 64)
+	// Sometime values are doubled in several units, like this
+	// 0.8224 mW / -0.85 dBm
+	// Taking only first value
+	firstInputPart := strings.Split(input, "/")[0]
+	var sb strings.Builder
+	hasDot := false
+	hasMinus := false
+
+	for i, r := range firstInputPart {
+		switch {
+		case unicode.IsDigit(r):
+			sb.WriteRune(r)
+		case r == '.' && !hasDot:
+			sb.WriteRune(r)
+			hasDot = true
+		case r == '-' && i == 0 && !hasMinus:
+			sb.WriteRune(r)
+			hasMinus = true
+		}
+	}
+
+	float, err := strconv.ParseFloat(sb.String(), 64)
 	if err != nil {
 		// TODO: consistent logging levels
 		Logger.Warn("Cannot parse string to float", "err", err, "string", input)
@@ -25,30 +52,27 @@ func parseFloat64(input string) float64 {
 }
 
 func parseBool(input string) bool {
-	output := false
-	// TODO: better string to bool conversion, probably yaml-based?
-	switch strings.ToUpper(input) {
-	case "YES":
-		output = true
-	case "ON":
-		output = true
-	case "TRUE":
-		output = true
+	var result bool
+	err := yaml.Unmarshal([]byte(input), &result)
+	if err != nil {
+		Logger.Warn("Cannot parse bool (~ish) string to actual bool", "err", err, "string", input)
 	}
-	return output
+	return result
 }
 
 func parseSlice(input string) []string {
 	output := []string{}
-	// TODO: drop /n stuff (WTF this means? probably should rewrite func alltogether, with tests)
-	input_lines := strings.Split(input, "\n")
-	for _, line := range input_lines {
-		input_columns := strings.Split(line, " ")
-		for _, column := range input_columns {
-			if column != "" {
-				clean_column := strings.TrimSpace(strings.TrimSuffix(column, ","))
-				output = append(output, clean_column)
-			}
+
+	// TODO: replace with better way to replace all whitespace chars to single space
+	cleanLine := strings.ReplaceAll(input, "\n", " ")
+	cleanLine = strings.ReplaceAll(cleanLine, "\t", " ")
+	cleanLine = strings.ReplaceAll(cleanLine, ",", " ")
+
+	input_columns := strings.Split(cleanLine, " ")
+	for _, column := range input_columns {
+		if column != "" {
+			clean_column := strings.TrimSpace(column)
+			output = append(output, clean_column)
 		}
 	}
 	return output
