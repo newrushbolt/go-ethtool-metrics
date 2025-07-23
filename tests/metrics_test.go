@@ -117,6 +117,27 @@ func TestDriverInfoFull(t *testing.T) {
 	}
 }
 
+func TestDriverInfoEmpty(t *testing.T) {
+	resultFile := `{
+    "Common": null,
+    "Features": null
+}`
+
+	testModule := "driver_info"
+	fixture := "intel/i40e/00_sfp_10g_sr85"
+	srcFile, _ := ReadFixturePair(fixture, testModule, "full")
+	config := driver_info.CollectConfig{
+		CollectFeatures: false,
+		CollectCommon:   false,
+	}
+	info := driver_info.ParseInfo(srcFile, &config)
+	infoJson, err := json.MarshalIndent(info, "", "    ")
+	if err != nil {
+		t.Error(err)
+	}
+	assert.Equal(t, resultFile, string(infoJson))
+}
+
 func TestGenericInfoDefault(t *testing.T) {
 	testModule := "generic_info"
 	for _, fixture := range GetFixtureList() {
