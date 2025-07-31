@@ -24,6 +24,7 @@
     "Settings": {
         "Speed": "Unknown!",
         "SpeedBytes": null,
+        "SpeedBits": null,
         "Duplex": "Unknown! (255)",
         "Port": "Twisted Pair",
         "Transceiver": "internal",

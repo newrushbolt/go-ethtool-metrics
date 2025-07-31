@@ -13,7 +13,8 @@ import (
 )
 
 var (
-	Logger *slog.Logger
+	Logger  *slog.Logger
+	speedRe = regexp.MustCompile(`(\d+)(.+)`)
 )
 
 func init() {
@@ -31,36 +32,45 @@ func _DropHeaderLine(input string) string {
 	}
 }
 
-func _GetPortSpeedBytes(input string) (speedBytes float64) {
-	speedRe := regexp.MustCompile(`(\d+)(.+)`)
-	result_slice := speedRe.FindAllStringSubmatch(input, -1)
+func _GetPortSpeedBits(rawInput string) float64 {
+	// TODO: rewrite parse logic in a more elegant way
 	var rawSpeedBytes float64
-	var speedSuffix string
-	result := result_slice[0]
+
+	input := strings.Trim(rawInput, " \t")
+	resultSlice := speedRe.FindAllStringSubmatch(input, -1)
+	if resultSlice == nil {
+		Logger.Error("Cannot get speed units from string", "speed_string", rawInput)
+		return math.NaN()
+	}
+	result := resultSlice[0]
+
+	// We expect exactly three matches, because first match is full match which we never use
+	// The second is numeric value, and the third is postfix that defines the unit
 	if len(result) != 3 {
+		Logger.Error("Cannot get speed units from string", "speed_string", rawInput)
 		return math.NaN()
 	}
 	var err error
 	rawSpeedBytes, err = strconv.ParseFloat(result[1], 64)
 	if err != nil {
-		Logger.Error("Cannot get float64 from speed string", "speed_string", input)
+		Logger.Error("Cannot get float64 from speed string", "speed_string", rawInput)
 		return math.NaN()
 	}
-	speedSuffix = result[2]
 
 	var speedMultiplier float64
-	// Doing straight metric conversion, not 2^x
-	switch speedSuffix {
+	speedPostfix := result[2]
+	switch speedPostfix {
 	case "Mb/s":
+		// Doing straight metric conversion, not 2^x
 		speedMultiplier = 1000 * 1000
 	case "Gb/s":
 		speedMultiplier = 1000 * 1000 * 1000
 	default:
-		Logger.Error("Cannot get speed units from string, must have 'Gb/s' or 'Mb/s'", "speed_string", "input")
+		Logger.Error("Cannot get speed units from string, must have 'Gb/s' or 'Mb/s'", "speed_string", input)
 		return math.NaN()
 	}
-	speedBytes = rawSpeedBytes * speedMultiplier
-	return speedBytes
+	speedBits := rawSpeedBytes * speedMultiplier
+	return speedBits
 }
 
 func _ParseSupportedSettings(input string) *AvaliableSettings {
@@ -116,7 +126,9 @@ func ParseInfo(rawInfo string, config *CollectConfig) *GenericInfo {
 		Settings:           settings,
 	}
 	if (commonInfo.Settings.Speed != "Unknown!") && (commonInfo.Settings.Speed != "") {
-		speedBytes := _GetPortSpeedBytes(commonInfo.Settings.Speed)
+		speedBits := _GetPortSpeedBits(commonInfo.Settings.Speed)
+		speedBytes := speedBits / 8
+		commonInfo.Settings.SpeedBits = &speedBits
 		commonInfo.Settings.SpeedBytes = &speedBytes
 	}
 	return &commonInfo
