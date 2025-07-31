@@ -15,7 +15,8 @@
     },
     "Settings": {
         "Speed": "1000Mb/s",
-        "SpeedBytes": 1000000000,
+        "SpeedBytes": 125000000,
+        "SpeedBits": 1000000000,
         "Duplex": "Full",
         "Port": "Twisted Pair",
         "Transceiver": "internal",

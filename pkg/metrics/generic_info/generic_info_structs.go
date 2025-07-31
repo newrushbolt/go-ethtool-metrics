@@ -27,8 +27,19 @@ type AvaliableSettings struct {
 }
 
 type Settings struct {
-	Speed           string
-	SpeedBytes      *float64
+	Speed      string
+	SpeedBytes *float64
+	// There is a silent conflict of units between
+	// prometheus-oriented products (eg node_exporter), using BYTES,
+	// and network-oriented tools (eg ethtool), using BITS
+	//
+	// Both worlds have their reasons to do so,
+	// so for ease of use I decided to present both metrics
+	//
+	// If having 2 units bothers you in terms of storing extra metrics or any other way,
+	// feel free to drop excessive metric on metric_relabel_config
+	SpeedBits *float64
+
 	Duplex          string
 	Port            string
 	Transceiver     string

@@ -31,6 +31,7 @@ func init() {
 	Logger = slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: loggerLever}))
 }
 
+// TODO: move compilated regexps to package-level var
 func compileQueuedRegexps(rawQueuedRegexps map[string][]string) map[string][]*regexp.Regexp {
 	queuedRegexps := make(map[string][]*regexp.Regexp, len(rawQueuedRegexps))
 	for regexName, regexStrings := range rawQueuedRegexps {

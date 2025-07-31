@@ -15,7 +15,8 @@
     },
     "Settings": {
         "Speed": "10000Mb/s",
-        "SpeedBytes": 10000000000,
+        "SpeedBytes": 1250000000,
+        "SpeedBits": 10000000000,
         "Duplex": "Full",
         "Port": "FIBRE",
         "Transceiver": "internal",
