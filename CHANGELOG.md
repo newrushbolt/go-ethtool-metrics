@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.6](https://github.com/newrushbolt/go-ethtool-metrics/compare/v0.0.5...v0.0.6) (2025-07-31)
+
+
+### Bug Fixes
+
+* correct speed units ([f009539](https://github.com/newrushbolt/go-ethtool-metrics/commit/f00953928820d0157a71aae0dae00511460c0f32))
+
 ## [0.0.5](https://github.com/newrushbolt/go-ethtool-metrics/compare/v0.0.4...v0.0.5) (2025-07-23)
 
 
