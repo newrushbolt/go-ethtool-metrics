@@ -34,3 +34,14 @@ func TestEmptyParseInfo(t *testing.T) {
 	result := ParseInfo("", config)
 	assert.Nil(t, result)
 }
+
+func TestEmptyResult(t *testing.T) {
+	expectedResult := GenericInfo{}
+	config := CollectConfig{
+		CollectAdvertisedSettings: false,
+		CollectSupportedSettings:  false,
+		CollectSettings:           false,
+	}
+	result := ParseInfo("some test data", &config)
+	assert.Equal(t, &expectedResult, result)
+}

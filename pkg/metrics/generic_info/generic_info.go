@@ -118,18 +118,18 @@ func ParseInfo(rawInfo string, config *CollectConfig) *GenericInfo {
 	var settings *Settings
 	if config.CollectSettings {
 		settings = _ParseSettings(cleanInput)
+		if (settings.Speed != "Unknown!") && (settings.Speed != "") {
+			speedBits := _GetPortSpeedBits(settings.Speed)
+			speedBytes := speedBits / 8
+			settings.SpeedBits = &speedBits
+			settings.SpeedBytes = &speedBytes
+		}
 	}
 
 	commonInfo := GenericInfo{
 		SupportedSettings:  supportedSetting,
 		AdvertisedSettings: advertisedSettings,
 		Settings:           settings,
-	}
-	if (commonInfo.Settings.Speed != "Unknown!") && (commonInfo.Settings.Speed != "") {
-		speedBits := _GetPortSpeedBits(commonInfo.Settings.Speed)
-		speedBytes := speedBits / 8
-		commonInfo.Settings.SpeedBits = &speedBits
-		commonInfo.Settings.SpeedBytes = &speedBytes
 	}
 	return &commonInfo
 }
