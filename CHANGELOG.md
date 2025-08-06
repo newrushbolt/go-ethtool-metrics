@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.7](https://github.com/newrushbolt/go-ethtool-metrics/compare/v0.0.6...v0.0.7) (2025-08-06)
+
+
+### Bug Fixes
+
+* dont panic on empty expected result ([277ceb6](https://github.com/newrushbolt/go-ethtool-metrics/commit/277ceb62f6ce705ab81566cbb1a03b2daa67584d))
+
 ## [0.0.6](https://github.com/newrushbolt/go-ethtool-metrics/compare/v0.0.5...v0.0.6) (2025-07-31)
 
 
