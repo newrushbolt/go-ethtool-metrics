@@ -5,7 +5,7 @@
             "10000baseT/Full"
         ],
         "PauseFrameUse": "Symmetric Receive-only",
-        "FecModes": "Not reported"
+        "FecModes": ""
     },
     "AdvertisedSettings": {
         "LinkModes": [
@@ -13,7 +13,7 @@
             "10000baseT/Full"
         ],
         "PauseFrameUse": "No",
-        "FecModes": "Not reported"
+        "FecModes": ""
     },
     "Settings": {
         "Speed": "10000Mb/s",

@@ -6,9 +6,7 @@ Settings for eno99:
 	Supported pause frame use: Symmetric
 	Supports auto-negotiation: Yes
 	Supported FEC modes: Not reported
-	Advertised link modes:  10baseT/Half 10baseT/Full
-	                        100baseT/Half 100baseT/Full
-	                        1000baseT/Full
+	Advertised link modes: Not reported
 	Advertised pause frame use: Symmetric
 	Advertised auto-negotiation: Yes
 	Advertised FEC modes: Not reported

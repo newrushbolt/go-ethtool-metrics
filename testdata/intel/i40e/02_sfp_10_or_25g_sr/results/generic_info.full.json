@@ -11,7 +11,7 @@
             "10000baseLR/Full"
         ],
         "PauseFrameUse": "Symmetric",
-        "FecModes": "None"
+        "FecModes": ""
     },
     "AdvertisedSettings": {
         "LinkModes": [
@@ -19,7 +19,7 @@
             "10000baseSR/Full"
         ],
         "PauseFrameUse": "No",
-        "FecModes": "None"
+        "FecModes": ""
     },
     "Settings": {
         "Speed": "10000Mb/s",

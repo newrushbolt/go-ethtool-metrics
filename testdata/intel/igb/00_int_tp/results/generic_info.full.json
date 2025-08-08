@@ -8,18 +8,12 @@
             "1000baseT/Full"
         ],
         "PauseFrameUse": "Symmetric",
-        "FecModes": "Not reported"
+        "FecModes": ""
     },
     "AdvertisedSettings": {
-        "LinkModes": [
-            "10baseT/Half",
-            "10baseT/Full",
-            "100baseT/Half",
-            "100baseT/Full",
-            "1000baseT/Full"
-        ],
+        "LinkModes": [],
         "PauseFrameUse": "Symmetric",
-        "FecModes": "Not reported"
+        "FecModes": ""
     },
     "Settings": {
         "Speed": "Unknown!",
