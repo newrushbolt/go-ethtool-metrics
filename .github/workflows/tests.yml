@@ -11,7 +11,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  COVERAGE_THRESHOLD: 93.9
+  COVERAGE_THRESHOLD: 96.8
 
 jobs:
   test_go:
@@ -27,7 +27,7 @@ jobs:
       - name: Get coverage filtering package
         run: go install github.com/quantumcycle/go-ignore-cov@v0.6.1
       - name: Filter coverage
-        run: go-ignore-cov --file coverage.out
+        run: go-ignore-cov -v --file coverage.out
 
       - name: Show coverage report per-function
         run: go tool cover -func coverage.out

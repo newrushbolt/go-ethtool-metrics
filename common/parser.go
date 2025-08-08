@@ -6,6 +6,7 @@ import (
 	"os"
 	"reflect"
 	"regexp"
+	"slices"
 	"strconv"
 	"strings"
 	"unicode"
@@ -14,7 +15,8 @@ import (
 )
 
 var (
-	Logger *slog.Logger
+	Logger                        *slog.Logger
+	emptySliceOrStringDefinitions = []string{"Not reported", "None"}
 )
 
 func init() {
@@ -48,11 +50,25 @@ func parseBool(input string) bool {
 	return result
 }
 
+func parseString(input string) string {
+	cleanInput := strings.TrimSpace(input)
+	if slices.Contains(emptySliceOrStringDefinitions, cleanInput) {
+		return ""
+	}
+	return cleanInput
+}
+
 func parseSlice(input string) []string {
+	cleanInput := strings.TrimSpace(input)
+	if slices.Contains(emptySliceOrStringDefinitions, cleanInput) {
+		return []string{}
+	}
+
 	splitFunc := func(c rune) bool {
 		return unicode.IsSpace(c) || c == ','
 	}
-	output := strings.FieldsFunc(input, splitFunc)
+	output := strings.FieldsFunc(cleanInput, splitFunc)
+
 	// // Shippet for cleaning excess items from slice
 	// deleteFunc := func (s string) bool {
 	// 	return true
@@ -97,7 +113,7 @@ func ParseAbstractDataObject(data *map[string]string, obj any, tagName string) {
 				if tag == key {
 					switch fieldObj.Kind() {
 					case reflect.String:
-						fieldObj.SetString(value)
+						fieldObj.SetString(parseString(value))
 					// Direct float values
 					case reflect.Float64:
 						fieldObj.SetFloat(parseFloat64(value))
@@ -165,12 +181,6 @@ func ParseAbstractColonData(data string, prefix string, keepPrefix bool) map[str
 		splittedLine := []string{
 			line[:separatorIndex],
 			line[separatorIndex+1:],
-		}
-		splittedLineLength := len(splittedLine)
-		// TODO: better logic for splitting lines
-		if !(splittedLineLength == 2 || splittedLineLength == 3) {
-			Logger.Debug("Splitted line has invalid amount of parts", "line", line, "splitted_line", splittedLine)
-			continue
 		}
 		key := strings.TrimSpace(splittedLine[0])
 		value := strings.TrimSpace(splittedLine[1])
