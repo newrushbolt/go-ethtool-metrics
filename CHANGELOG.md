@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.8](https://github.com/newrushbolt/go-ethtool-metrics/compare/v0.0.7...v0.0.8) (2025-08-08)
+
+
+### Bug Fixes
+
+* filter out well-known empty values for strings and slices ([6cc1010](https://github.com/newrushbolt/go-ethtool-metrics/commit/6cc10105a989053d4d0b46b02f44656c94004296))
+
 ## [0.0.7](https://github.com/newrushbolt/go-ethtool-metrics/compare/v0.0.6...v0.0.7) (2025-08-06)
 
 
