@@ -3,12 +3,18 @@ package statistics
 type CollectConfig struct {
 	General  bool
 	PerQueue bool
+	// Some drivers (at least bnxt_en) does not provide per-queue tx_bytes\rx_bytes metrics.
+	// This flag allows us to generate them using formula `bytes=ucast_bytes+mcast_bytes+bcast_bytes`
+	PerQueueGenerateMissingBytesMetrics bool
+	PerQueuePerTypeBytes                bool
 }
 
 func (config CollectConfig) Default() *CollectConfig {
 	return &CollectConfig{
-		General:  true,
-		PerQueue: false,
+		General:                             true,
+		PerQueue:                            false,
+		PerQueueGenerateMissingBytesMetrics: true,
+		PerQueuePerTypeBytes:                false,
 	}
 }
 
@@ -19,17 +25,34 @@ type StatisticsInfo struct {
 
 type PerQueueStatistics []QueueStatistics
 type QueueStatistics struct {
-	TxBytes *float64 `queue_statistics:"tx_bytes"`
-	RxBytes *float64 `queue_statistics:"rx_bytes"`
-	// Needs bnxt_en and Nan support first. Fix after 0.0.4
-	// We also need to calculate RxBytes|TxBytes for bnxt_en by summing all types of bytes
-	// RxUcastBytes *float64 `queue_statistics:"rx_ucast_bytes"`
-	// RxMcastBytes *float64 `queue_statistics:"rx_mcast_bytes"`
-	// RxBcastBytes *float64 `queue_statistics:"rx_bcast_bytes"`
-	// TxUcastBytes *float64 `queue_statistics:"tx_ucast_bytes"`
-	// TxMcastBytes *float64 `queue_statistics:"tx_mcast_bytes"`
-	// TxBcastBytes *float64 `queue_statistics:"tx_bcast_bytes"`
-	// TpaBytes     *float64 `queue_statistics:"tpa_bytes"`
+	TxBytes      *float64 `queue_statistics:"tx_bytes"`
+	RxBytes      *float64 `queue_statistics:"rx_bytes"`
+	RxUcastBytes *float64 `queue_statistics:"rx_ucast_bytes"`
+	RxMcastBytes *float64 `queue_statistics:"rx_mcast_bytes"`
+	RxBcastBytes *float64 `queue_statistics:"rx_bcast_bytes"`
+	TxUcastBytes *float64 `queue_statistics:"tx_ucast_bytes"`
+	TxMcastBytes *float64 `queue_statistics:"tx_mcast_bytes"`
+	TxBcastBytes *float64 `queue_statistics:"tx_bcast_bytes"`
+	// Other "yet to be supported metrics"
+	// First prio
+	// [0]: tx_errors: 0
+	// [0]: tx_discards: 0
+	// [0]: rx_discards: 0
+	// [0]: rx_errors: 0
+	// Second prio
+	// [0]: rx_ucast_packets: 276347403
+	// [0]: rx_mcast_packets: 1829492
+	// [0]: rx_bcast_packets: 30964
+	// [0]: tx_ucast_packets: 5860187670
+	// [0]: tx_mcast_packets: 1
+	// [0]: tx_bcast_packets: 0
+	// [0]: tpa_packets: 42605077
+	// [0]: tpa_bytes: 94005443409
+	// [0]: tpa_events: 19894790
+	// [0]: tpa_aborts: 8731049
+	// [0]: rx_l4_csum_errors: 0
+	// [0]: rx_resets: 0
+	// [0]: rx_buf_errors: 0
 }
 
 type GeneralStatistics struct {

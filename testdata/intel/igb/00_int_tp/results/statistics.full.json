@@ -12,35 +12,83 @@
     "PerQueue": [
         {
             "TxBytes": 434523452,
-            "RxBytes": 0
+            "RxBytes": 0,
+            "RxUcastBytes": null,
+            "RxMcastBytes": null,
+            "RxBcastBytes": null,
+            "TxUcastBytes": null,
+            "TxMcastBytes": null,
+            "TxBcastBytes": null
         },
         {
             "TxBytes": 452345,
-            "RxBytes": 4523452345
+            "RxBytes": 4523452345,
+            "RxUcastBytes": null,
+            "RxMcastBytes": null,
+            "RxBcastBytes": null,
+            "TxUcastBytes": null,
+            "TxMcastBytes": null,
+            "TxBcastBytes": null
         },
         {
             "TxBytes": 0,
-            "RxBytes": 0
+            "RxBytes": 0,
+            "RxUcastBytes": null,
+            "RxMcastBytes": null,
+            "RxBcastBytes": null,
+            "TxUcastBytes": null,
+            "TxMcastBytes": null,
+            "TxBcastBytes": null
         },
         {
             "TxBytes": 0,
-            "RxBytes": 0
+            "RxBytes": 0,
+            "RxUcastBytes": null,
+            "RxMcastBytes": null,
+            "RxBcastBytes": null,
+            "TxUcastBytes": null,
+            "TxMcastBytes": null,
+            "TxBcastBytes": null
         },
         {
             "TxBytes": 0,
-            "RxBytes": 0
+            "RxBytes": 0,
+            "RxUcastBytes": null,
+            "RxMcastBytes": null,
+            "RxBcastBytes": null,
+            "TxUcastBytes": null,
+            "TxMcastBytes": null,
+            "TxBcastBytes": null
         },
         {
             "TxBytes": 0,
-            "RxBytes": 0
+            "RxBytes": 0,
+            "RxUcastBytes": null,
+            "RxMcastBytes": null,
+            "RxBcastBytes": null,
+            "TxUcastBytes": null,
+            "TxMcastBytes": null,
+            "TxBcastBytes": null
         },
         {
             "TxBytes": 0,
-            "RxBytes": 0
+            "RxBytes": 0,
+            "RxUcastBytes": null,
+            "RxMcastBytes": null,
+            "RxBcastBytes": null,
+            "TxUcastBytes": null,
+            "TxMcastBytes": null,
+            "TxBcastBytes": null
         },
         {
             "TxBytes": 0,
-            "RxBytes": 0
+            "RxBytes": 0,
+            "RxUcastBytes": null,
+            "RxMcastBytes": null,
+            "RxBcastBytes": null,
+            "TxUcastBytes": null,
+            "TxMcastBytes": null,
+            "TxBcastBytes": null
         }
     ]
 }

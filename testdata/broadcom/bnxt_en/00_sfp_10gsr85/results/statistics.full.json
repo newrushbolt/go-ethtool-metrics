@@ -11,36 +11,84 @@
     },
     "PerQueue": [
         {
-            "TxBytes": null,
-            "RxBytes": null
+            "TxBytes": 1790928332104,
+            "RxBytes": 594513300139,
+            "RxUcastBytes": 594284585291,
+            "RxMcastBytes": 226857008,
+            "RxBcastBytes": 1857840,
+            "TxUcastBytes": 1790928332018,
+            "TxMcastBytes": 86,
+            "TxBcastBytes": 0
         },
         {
-            "TxBytes": null,
-            "RxBytes": null
+            "TxBytes": 1975049053094,
+            "RxBytes": 699746805921,
+            "RxUcastBytes": 699746805921,
+            "RxMcastBytes": 0,
+            "RxBcastBytes": 0,
+            "TxUcastBytes": 1975041769582,
+            "TxMcastBytes": 7283512,
+            "TxBcastBytes": 0
         },
         {
-            "TxBytes": null,
-            "RxBytes": null
+            "TxBytes": 2240562084557,
+            "RxBytes": 1063417513932,
+            "RxUcastBytes": 1063417513932,
+            "RxMcastBytes": 0,
+            "RxBcastBytes": 0,
+            "TxUcastBytes": 2240562084331,
+            "TxMcastBytes": 70,
+            "TxBcastBytes": 156
         },
         {
-            "TxBytes": null,
-            "RxBytes": null
+            "TxBytes": 2160104817655,
+            "RxBytes": 628093952044,
+            "RxUcastBytes": 628093952044,
+            "RxMcastBytes": 0,
+            "RxBcastBytes": 0,
+            "TxUcastBytes": 2160104817655,
+            "TxMcastBytes": 0,
+            "TxBcastBytes": 0
         },
         {
-            "TxBytes": null,
-            "RxBytes": null
+            "TxBytes": 1849103047540,
+            "RxBytes": 1185531602878,
+            "RxUcastBytes": 1185531602878,
+            "RxMcastBytes": 0,
+            "RxBcastBytes": 0,
+            "TxUcastBytes": 1849103047540,
+            "TxMcastBytes": 0,
+            "TxBcastBytes": 0
         },
         {
-            "TxBytes": null,
-            "RxBytes": null
+            "TxBytes": 1713948100494,
+            "RxBytes": 543897585774,
+            "RxUcastBytes": 543897585774,
+            "RxMcastBytes": 0,
+            "RxBcastBytes": 0,
+            "TxUcastBytes": 1713948100494,
+            "TxMcastBytes": 0,
+            "TxBcastBytes": 0
         },
         {
-            "TxBytes": null,
-            "RxBytes": null
+            "TxBytes": 1844324940650,
+            "RxBytes": 1853590627809,
+            "RxUcastBytes": 1853590627809,
+            "RxMcastBytes": 0,
+            "RxBcastBytes": 0,
+            "TxUcastBytes": 1844324940470,
+            "TxMcastBytes": 180,
+            "TxBcastBytes": 0
         },
         {
-            "TxBytes": null,
-            "RxBytes": null
+            "TxBytes": 1669759833613,
+            "RxBytes": 676172632889,
+            "RxUcastBytes": 676172632889,
+            "RxMcastBytes": 0,
+            "RxBcastBytes": 0,
+            "TxUcastBytes": 1669759833433,
+            "TxMcastBytes": 180,
+            "TxBcastBytes": 0
         }
     ]
 }
