@@ -24,6 +24,21 @@ func init() {
 	Logger = slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: loggerLever}))
 }
 
+func SumFieldsFloat64(fields []*float64) *float64 {
+	var sum float64
+	var exists bool
+	for _, value := range fields {
+		if value != nil {
+			sum += *value
+			exists = true
+		}
+	}
+	if exists {
+		return &sum
+	}
+	return nil
+}
+
 // Parses and returns the first float found in string
 // Scientific notations are not supported
 func parseFloat64(input string) float64 {

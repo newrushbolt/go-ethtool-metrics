@@ -65,8 +65,28 @@ func TestPerTypeBytesKeep(t *testing.T) {
 	assert.Equal(t, &expectedParseResult, parseResult)
 }
 
-func TestQueueSumFields(t *testing.T) {
-	fields := []*float64{}
-	fieldsSum := sumBytesFields(fields)
-	assert.Nil(t, fieldsSum)
+func TestExtractQueuedMetricsMultipleRegexMatch(t *testing.T) {
+	metrics := map[string]string{
+		"rx-0.bytes":       "100",
+		"rx_queue_0_bytes": "200",
+	}
+	result := extractQueuedMetrics(metrics)
+	assert.NotNil(t, result)
+}
+
+func TestExtractQueuedMetricsInvalidQueueIndex(t *testing.T) {
+	metrics := map[string]string{
+		"rx-abc.bytes": "400",
+	}
+	result := extractQueuedMetrics(metrics)
+	assert.NotNil(t, result)
+}
+
+func TestExtractQueuedMetricsNoMatch(t *testing.T) {
+	metrics := map[string]string{
+		"not_a_queue_metric": "999",
+	}
+	result := extractQueuedMetrics(metrics)
+	assert.NotNil(t, result)
+	assert.Equal(t, 0, len(result))
 }

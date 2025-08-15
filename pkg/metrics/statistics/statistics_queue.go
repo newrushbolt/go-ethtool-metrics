@@ -69,28 +69,31 @@ func extractQueuedMetrics(srcMetrics map[string]string) queuedMetrics {
 		for metricRegexpName, possibleMetricRegexps := range queuedRegexps {
 			regexpMatched := false
 			for _, metricRegexp := range possibleMetricRegexps {
+				regexpLogger := Logger.With("regexp", metricRegexp.String(), "regexpGroup", metricRegexpName, "metricName", srcMetricName)
 				matchedMetricRegexp := metricRegexp.FindAllStringSubmatch(srcMetricName, -1)
 				if matchedMetricRegexp == nil {
 					continue
 				}
 				if regexpMatched {
-					Logger.Error("Queued metric has more than one match, some regexps are overlapping", "metric", srcMetricName, "patternRegexp", metricRegexp.String(), "pattern", metricRegexpName)
+					regexpLogger.Error("Queued metric has more than one match, some regexps are overlapping")
 				}
 				regexpMatched = true
-				Logger.Debug("Metric matches pattern", "metric", srcMetricName, "patternRegexp", metricRegexp.String(), "pattern", metricRegexpName)
-				// TODO: check if only one result matched
-				// switch len(matchedMetricRegexp){
-				// case 1:
+				regexpLogger.Debug("Metric matches pattern")
+				if len(matchedMetricRegexp) > 1 {
+					regexpLogger.Error("Regexp matched more than once, something is broken")
+					continue
+				}
 
 				// We expect to have 1 match, that's why we taking [0] from matchedMetricRegexp
 				// and we need the first capture group, which is always second, that's why [1]
 				metricIndexString := matchedMetricRegexp[0][1]
 				metricIndex64, err := strconv.ParseInt(metricIndexString, 10, 64)
 				if err != nil {
+					regexpLogger.Error("Cannot parse queue index", "error", err)
 					continue
 				}
 				metricIndex := int(metricIndex64)
-				Logger.Debug("Metric has index", "metric", srcMetricName, "index", metricIndex)
+				regexpLogger.Debug("Metric has index", "index", metricIndex)
 
 				currentIndexMap := queuedMetricsMap[metricIndex]
 				if currentIndexMap == nil {
@@ -118,7 +121,7 @@ func queueRemovePerTypeBytes(stats *QueueStatistics) {
 
 func queueGenerateMissingBytesMetrics(stats *QueueStatistics) {
 	if stats.RxBytes == nil {
-		stats.RxBytes = sumBytesFields([]*float64{
+		stats.RxBytes = common.SumFieldsFloat64([]*float64{
 			stats.RxUcastBytes,
 			stats.RxMcastBytes,
 			stats.RxBcastBytes,
@@ -126,27 +129,12 @@ func queueGenerateMissingBytesMetrics(stats *QueueStatistics) {
 	}
 
 	if stats.TxBytes == nil {
-		stats.TxBytes = sumBytesFields([]*float64{
+		stats.TxBytes = common.SumFieldsFloat64([]*float64{
 			stats.TxUcastBytes,
 			stats.TxMcastBytes,
 			stats.TxBcastBytes,
 		})
 	}
-}
-
-func sumBytesFields(fields []*float64) *float64 {
-	var sum float64
-	var exists bool
-	for _, value := range fields {
-		if value != nil {
-			sum += *value
-			exists = true
-		}
-	}
-	if exists {
-		return &sum
-	}
-	return nil
 }
 
 func parseQueuedInfo(statisticsMap map[string]string, config CollectConfig) *PerQueueStatistics {

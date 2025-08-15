@@ -196,3 +196,23 @@ func TestParseAbstractColonData_InvalidSplit(t *testing.T) {
 	result := ParseAbstractColonData(input, "", false)
 	assert.Equal(t, expectedResult, result)
 }
+
+func TestQueueSumFieldsEmpty(t *testing.T) {
+	fields := []*float64{}
+	fieldsSum := SumFieldsFloat64(fields)
+	assert.Nil(t, fieldsSum)
+}
+
+func TestQueueSumFields(t *testing.T) {
+	float3 := 3.9
+	expectedResult := &float3
+
+	float1 := 1.3
+	float2 := 2.6
+	fields := []*float64{
+		&float1,
+		&float2,
+	}
+	fieldsSum := SumFieldsFloat64(fields)
+	assert.InDelta(t, *expectedResult, *fieldsSum, 0.00001)
+}
