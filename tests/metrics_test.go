@@ -195,8 +195,10 @@ func TestStatisticsFull(t *testing.T) {
 	for _, fixture := range GetFixtureList() {
 		t.Run(fixture, func(t *testing.T) {
 			config := statistics.CollectConfig{
-				General:  true,
-				PerQueue: true,
+				General:                             true,
+				PerQueue:                            true,
+				PerQueueGenerateMissingBytesMetrics: true,
+				PerQueuePerTypeBytes:                true,
 			}
 			srcFile, resultFile := ReadFixturePair(fixture, testModule, "full")
 			info := statistics.ParseInfo(srcFile, &config)
