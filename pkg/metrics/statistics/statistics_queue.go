@@ -10,7 +10,46 @@ import (
 
 type queuedMetrics map[int]map[string]string
 
-// TODO: move compilated regexps to package-level var
+var rawQueuedRegexps = map[string][]string{
+	"rx_bytes": {
+		"rx-([0-9]+).bytes",
+		"rx_queue_([0-9]+)_bytes",
+		"rx-([0-9]+).rx_bytes",
+	},
+	"tx_bytes": {
+		"tx-([0-9]+).bytes",
+		"tx_queue_([0-9]+)_bytes",
+		"tx-([0-9]+).tx_bytes",
+	},
+	"rx_ucast_bytes": {
+		`\[([0-9]+)\]: rx_ucast_bytes`,
+	},
+	"rx_mcast_bytes": {
+		`\[([0-9]+)\]: rx_mcast_bytes`,
+	},
+	"rx_bcast_bytes": {
+		`\[([0-9]+)\]: rx_bcast_bytes`,
+	},
+	"tx_ucast_bytes": {
+		`\[([0-9]+)\]: tx_ucast_bytes`,
+	},
+	"tx_mcast_bytes": {
+		`\[([0-9]+)\]: tx_mcast_bytes`,
+	},
+	"tx_bcast_bytes": {
+		`\[([0-9]+)\]: tx_bcast_bytes`,
+	},
+	"tpa_bytes": {
+		`\[([0-9]+)\]: tpa_bytes`,
+	},
+}
+
+var queuedRegexps map[string][]*regexp.Regexp
+
+func init() {
+	queuedRegexps = compileQueuedRegexps(rawQueuedRegexps)
+}
+
 func compileQueuedRegexps(rawQueuedRegexps map[string][]string) map[string][]*regexp.Regexp {
 	queuedRegexps := make(map[string][]*regexp.Regexp, len(rawQueuedRegexps))
 	for regexName, regexStrings := range rawQueuedRegexps {
@@ -25,41 +64,6 @@ func compileQueuedRegexps(rawQueuedRegexps map[string][]string) map[string][]*re
 }
 
 func extractQueuedMetrics(srcMetrics map[string]string) queuedMetrics {
-	rawQueuedRegexps := map[string][]string{
-		"rx_bytes": {
-			"rx-([0-9]+).bytes",
-			"rx_queue_([0-9]+)_bytes",
-			"rx-([0-9]+).rx_bytes",
-		},
-		"tx_bytes": {
-			"tx-([0-9]+).bytes",
-			"tx_queue_([0-9]+)_bytes",
-			"tx-([0-9]+).tx_bytes",
-		},
-		"rx_ucast_bytes": {
-			`\[([0-9]+)\]: rx_ucast_bytes`,
-		},
-		"rx_mcast_bytes": {
-			`\[([0-9]+)\]: rx_mcast_bytes`,
-		},
-		"rx_bcast_bytes": {
-			`\[([0-9]+)\]: rx_bcast_bytes`,
-		},
-		"tx_ucast_bytes": {
-			`\[([0-9]+)\]: tx_ucast_bytes`,
-		},
-		"tx_mcast_bytes": {
-			`\[([0-9]+)\]: tx_mcast_bytes`,
-		},
-		"tx_bcast_bytes": {
-			`\[([0-9]+)\]: tx_bcast_bytes`,
-		},
-		"tpa_bytes": {
-			`\[([0-9]+)\]: tpa_bytes`,
-		},
-	}
-
-	queuedRegexps := compileQueuedRegexps(rawQueuedRegexps)
 	queuedMetricsMap := queuedMetrics{}
 	for srcMetricName, srcMetricvalue := range srcMetrics {
 		for metricRegexpName, possibleMetricRegexps := range queuedRegexps {
@@ -114,46 +118,35 @@ func queueRemovePerTypeBytes(stats *QueueStatistics) {
 
 func queueGenerateMissingBytesMetrics(stats *QueueStatistics) {
 	if stats.RxBytes == nil {
-		var rxBytesExists bool
-		var rxBytesSum float64
-
-		bytesFields := []*float64{
+		stats.RxBytes = sumBytesFields([]*float64{
 			stats.RxUcastBytes,
 			stats.RxMcastBytes,
 			stats.RxBcastBytes,
-		}
-
-		for _, value := range bytesFields {
-			if value != nil {
-				rxBytesSum += *value
-				rxBytesExists = true
-			}
-		}
-		if rxBytesExists {
-			stats.RxBytes = &rxBytesSum
-		}
+		})
 	}
 
 	if stats.TxBytes == nil {
-		var txBytesExists bool
-		var txBytesSum float64
-
-		bytesFields := []*float64{
+		stats.TxBytes = sumBytesFields([]*float64{
 			stats.TxUcastBytes,
 			stats.TxMcastBytes,
 			stats.TxBcastBytes,
-		}
+		})
+	}
+}
 
-		for _, value := range bytesFields {
-			if value != nil {
-				txBytesSum += *value
-				txBytesExists = true
-			}
-		}
-		if txBytesExists {
-			stats.TxBytes = &txBytesSum
+func sumBytesFields(fields []*float64) *float64 {
+	var sum float64
+	var exists bool
+	for _, value := range fields {
+		if value != nil {
+			sum += *value
+			exists = true
 		}
 	}
+	if exists {
+		return &sum
+	}
+	return nil
 }
 
 func parseQueuedInfo(statisticsMap map[string]string, config CollectConfig) *PerQueueStatistics {

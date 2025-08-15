@@ -64,3 +64,9 @@ func TestPerTypeBytesKeep(t *testing.T) {
 	parseResult := parseQueuedInfo(statisticsMap, config)
 	assert.Equal(t, &expectedParseResult, parseResult)
 }
+
+func TestQueueSumFields(t *testing.T) {
+	fields := []*float64{}
+	fieldsSum := sumBytesFields(fields)
+	assert.Nil(t, fieldsSum)
+}
