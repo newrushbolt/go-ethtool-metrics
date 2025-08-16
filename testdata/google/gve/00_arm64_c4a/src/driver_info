@@ -1,0 +1,10 @@
+driver: gve
+version: 1.0.0
+firmware-version: 
+expansion-rom-version: 
+bus-info: 0000:00:00.0
+supports-statistics: yes
+supports-test: no
+supports-eeprom-access: no
+supports-register-dump: no
+supports-priv-flags: yes

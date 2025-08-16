@@ -1,0 +1,34 @@
+{
+    "General": {
+        "TxBytes": 71982,
+        "RxBytes": 252265,
+        "RxErrors": null,
+        "TxErrors": null,
+        "RxDiscards": 0,
+        "TxDiscards": 0,
+        "TxCollisions": null,
+        "RxCrcErrors": null
+    },
+    "PerQueue": [
+        {
+            "TxBytes": 45726,
+            "RxBytes": 167896,
+            "RxUcastBytes": null,
+            "RxMcastBytes": null,
+            "RxBcastBytes": null,
+            "TxUcastBytes": null,
+            "TxMcastBytes": null,
+            "TxBcastBytes": null
+        },
+        {
+            "TxBytes": 26256,
+            "RxBytes": 84369,
+            "RxUcastBytes": null,
+            "RxMcastBytes": null,
+            "RxBcastBytes": null,
+            "TxUcastBytes": null,
+            "TxMcastBytes": null,
+            "TxBcastBytes": null
+        }
+    ]
+}

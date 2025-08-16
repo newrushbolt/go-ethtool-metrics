@@ -1,0 +1,13 @@
+{
+    "General": {
+        "TxBytes": 71982,
+        "RxBytes": 252265,
+        "RxErrors": null,
+        "TxErrors": null,
+        "RxDiscards": 0,
+        "TxDiscards": 0,
+        "TxCollisions": null,
+        "RxCrcErrors": null
+    },
+    "PerQueue": null
+}

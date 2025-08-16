@@ -31,11 +31,10 @@ For `driver_info` and `generic_info` adding new data is pretty straightforward:
 * create new folders with incremented index
 
   ```bash
-  mkdir -p testdata/intel/i40e/02_sfp_10_or_25g_sr/src
-  mkdir -p testdata/intel/i40e/02_sfp_10_or_25g_sr/results
+  mkdir -p testdata/intel/i40e/02_sfp_10_or_25g_sr/{src,results}
   ```
 
-* fill files in `src` with ethtool output
+* fill files in `src` with ethtool output (assuming the interface name is eth0 ofk)
 
   ```bash
   ssh server-1.mycompany.local sudo ethtool -i eth0 2>/dev/null \
@@ -63,19 +62,14 @@ For `driver_info` and `generic_info` adding new data is pretty straightforward:
 * create empty result-files in `testdata/intel/i40e/02_sfp_10_or_25g_sr/results` for each mode
 
   ```bash
-  touch testdata/intel/i40e/02_sfp_10_or_25g_sr/results/module_info.default.json
-  touch testdata/intel/i40e/02_sfp_10_or_25g_sr/results/driver_info.default.json
-  touch testdata/intel/i40e/02_sfp_10_or_25g_sr/results/generic_info.default.json
-  touch testdata/intel/i40e/02_sfp_10_or_25g_sr/results/module_info.full.json
-  touch testdata/intel/i40e/02_sfp_10_or_25g_sr/results/driver_info.full.json
-  touch testdata/intel/i40e/02_sfp_10_or_25g_sr/results/generic_info.full.json
+  touch testdata/intel/i40e/02_sfp_10_or_25g_sr/results/{module_info,driver_info,generic_info,statistics}.{default,full}.json
   ```
 
 * run related tests
 
   ```bash
-  go test -v -test.run 'TestDriverInfo*'
-  go test -v -test.run 'TestGenericInfo*'
+  go test tests/metrics_test.go -v -test.run 'TestDriverInfo*'
+  go test tests/metrics_test.go -v -test.run 'TestGenericInfo*'
   ...
     === RUN   TestDriverInfoDefault/intel/i40e/02_sfp_10_or_25g_sr
         metrics_test.go:90:
@@ -165,8 +159,6 @@ This where it will require a little bit of data modification, especially if your
   ```bash
   ssh server-1.mycompany.local sudo ethtool -S eth0 2>/dev/null \
     > testdata/intel/i40e/02_sfp_10_or_25g_sr/src/statistics
-
-  touch testdata/intel/i40e/02_sfp_10_or_25g_sr/results/statistics.default.json
   ```
 
 * and have a look at the metrics

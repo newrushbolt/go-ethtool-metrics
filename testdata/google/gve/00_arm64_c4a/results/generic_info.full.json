@@ -1,0 +1,22 @@
+{
+    "SupportedSettings": {
+        "LinkModes": [],
+        "PauseFrameUse": "No",
+        "FecModes": ""
+    },
+    "AdvertisedSettings": {
+        "LinkModes": [],
+        "PauseFrameUse": "No",
+        "FecModes": ""
+    },
+    "Settings": {
+        "Speed": "10000Mb/s",
+        "SpeedBytes": 1250000000,
+        "SpeedBits": 10000000000,
+        "Duplex": "Full",
+        "Port": "Twisted Pair",
+        "Transceiver": "internal",
+        "AutoNegotiation": false,
+        "LinkDetected": true
+    }
+}
