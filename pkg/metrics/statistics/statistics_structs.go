@@ -62,8 +62,8 @@ type GeneralStatistics struct {
 	RxErrors *float64 `general_statistics:"rx_errors"` // bnxt:missing
 	TxErrors *float64 `general_statistics:"tx_errors,tx_err"`
 
-	RxDiscards   *float64 `general_statistics:"rx_discards,veb.rx_discards,rx_stat_discard"`
-	TxDiscards   *float64 `general_statistics:"tx_discards,veb.tx_discards,tx_stat_discard"`
+	RxDiscards   *float64 `general_statistics:"rx_discards,veb.rx_discards,rx_stat_discard,rx_dropped"`
+	TxDiscards   *float64 `general_statistics:"tx_discards,veb.tx_discards,tx_stat_discard,tx_dropped"`
 	TxCollisions *float64 `general_statistics:"tx_collisions,tx_total_collisions,collisions"`
 	RxCrcErrors  *float64 `general_statistics:"rx_crc_errors,rx_crc_errors.nic"` // Only exists in Intel
 }

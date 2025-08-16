@@ -1,0 +1,10 @@
+{
+    "Common": {
+        "DriverName": "gve",
+        "DriverVersion": "1.0.0",
+        "FirmwareVersion": "",
+        "FirmwareVersionParts": [],
+        "BusAddress": "0000:00:00.0"
+    },
+    "Features": null
+}

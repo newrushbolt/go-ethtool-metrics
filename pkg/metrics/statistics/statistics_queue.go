@@ -15,11 +15,13 @@ var rawQueuedRegexps = map[string][]string{
 		"rx-([0-9]+).bytes",
 		"rx_queue_([0-9]+)_bytes",
 		"rx-([0-9]+).rx_bytes",
+		`rx_bytes\[([0-9]+)\]`,
 	},
 	"tx_bytes": {
 		"tx-([0-9]+).bytes",
 		"tx_queue_([0-9]+)_bytes",
 		"tx-([0-9]+).tx_bytes",
+		`tx_bytes\[([0-9]+)\]`,
 	},
 	"rx_ucast_bytes": {
 		`\[([0-9]+)\]: rx_ucast_bytes`,
@@ -75,21 +77,25 @@ func extractQueuedMetrics(srcMetrics map[string]string) queuedMetrics {
 					continue
 				}
 				if regexpMatched {
-					regexpLogger.Error("Queued metric has more than one match, some regexps are overlapping")
+					regexpLogger.Error("Queued metric has more than one match, some regexps are overlapping, skipping")
 				}
 				regexpMatched = true
 				regexpLogger.Debug("Metric matches pattern")
 				if len(matchedMetricRegexp) > 1 {
-					regexpLogger.Error("Regexp matched more than once, something is broken")
+					regexpLogger.Error("Regexp matched more than once, regexp or metric is broken, skipping")
 					continue
 				}
 
+				if len(matchedMetricRegexp[0]) != 2 {
+					regexpLogger.Error("Regexp first match does not have 2 matches, regexp or metric is broken, skipping")
+					continue
+				}
 				// We expect to have 1 match, that's why we taking [0] from matchedMetricRegexp
 				// and we need the first capture group, which is always second, that's why [1]
 				metricIndexString := matchedMetricRegexp[0][1]
 				metricIndex64, err := strconv.ParseInt(metricIndexString, 10, 64)
 				if err != nil {
-					regexpLogger.Error("Cannot parse queue index", "error", err)
+					regexpLogger.Error("Cannot parse queue index, skipping", "error", err)
 					continue
 				}
 				metricIndex := int(metricIndex64)
