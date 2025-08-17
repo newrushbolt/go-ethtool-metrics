@@ -4,6 +4,8 @@
         "RxBytes": 14645706696119,
         "RxErrors": null,
         "TxErrors": 5,
+        "RxDrops": 3,
+        "TxDrops": null,
         "RxDiscards": null,
         "TxDiscards": null,
         "TxCollisions": null,
