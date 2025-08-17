@@ -4,8 +4,10 @@
         "RxBytes": 252265,
         "RxErrors": null,
         "TxErrors": null,
-        "RxDiscards": 0,
-        "TxDiscards": 0,
+        "RxDrops": 0,
+        "TxDrops": 0,
+        "RxDiscards": null,
+        "TxDiscards": null,
         "TxCollisions": null,
         "RxCrcErrors": null
     },
