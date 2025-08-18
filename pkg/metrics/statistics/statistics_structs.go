@@ -62,8 +62,8 @@ type GeneralStatistics struct {
 	RxErrors *float64 `general_statistics:"rx_errors"` // bnxt:missing
 	TxErrors *float64 `general_statistics:"tx_errors,tx_err"`
 
-	RxDrops *float64 `general_statistics:"rx_dropped"`
-	TxDrops *float64 `general_statistics:"tx_dropped"`
+	RxDrops *float64 `general_statistics:"rx_dropped,rx_drops"`
+	TxDrops *float64 `general_statistics:"tx_dropped,tx_drops"`
 
 	RxDiscards *float64 `general_statistics:"rx_discards,veb.rx_discards,rx_stat_discard"`
 	TxDiscards *float64 `general_statistics:"tx_discards,veb.tx_discards,tx_stat_discard"`

@@ -1,0 +1,34 @@
+# Well, this is weird. According to source code, we should also get rx_bytes and tx_bytes
+# https://github.com/torvalds/linux/blob/v6.14/drivers/net/virtio_net.c
+# This instance probably uses patched or\and broken virtio_net
+NIC statistics:
+     rx_drops: 0
+     rx_xdp_packets: 0
+     rx_xdp_tx: 0
+     rx_xdp_redirects: 0
+     rx_xdp_drops: 0
+     rx_kicks: 2
+     tx_xdp_tx: 0
+     tx_xdp_tx_drops: 0
+     tx_kicks: 2
+     tx_tx_timeouts: 0
+     rx0_drops: 0
+     rx0_xdp_packets: 0
+     rx0_xdp_tx: 0
+     rx0_xdp_redirects: 0
+     rx0_xdp_drops: 0
+     rx0_kicks: 1
+     rx1_drops: 0
+     rx1_xdp_packets: 0
+     rx1_xdp_tx: 0
+     rx1_xdp_redirects: 0
+     rx1_xdp_drops: 0
+     rx1_kicks: 1
+     tx0_xdp_tx: 0
+     tx0_xdp_tx_drops: 0
+     tx0_kicks: 1
+     tx0_tx_timeouts: 0
+     tx1_xdp_tx: 0
+     tx1_xdp_tx_drops: 0
+     tx1_kicks: 1
+     tx1_tx_timeouts: 0

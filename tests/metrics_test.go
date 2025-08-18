@@ -43,6 +43,8 @@ func GetFixtureList() []string {
 		"intel/igb/00_int_tp",
 		"broadcom/bnxt_en/00_sfp_10gsr85",
 		"google/gve/00_arm64_c4a",
+		"virtual/virtio_net/00_gcp_kernel_6_14",
+		"virtual/virtio_net/01_do_kernel_5_15",
 	}
 }
 

@@ -1,0 +1,15 @@
+{
+    "General": {
+        "TxBytes": null,
+        "RxBytes": null,
+        "RxErrors": null,
+        "TxErrors": null,
+        "RxDrops": 0,
+        "TxDrops": null,
+        "RxDiscards": null,
+        "TxDiscards": null,
+        "TxCollisions": null,
+        "RxCrcErrors": null
+    },
+    "PerQueue": null
+}

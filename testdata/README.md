@@ -143,7 +143,7 @@ After fixing that, and ensuring `ethtool -m eno2` shows you proper diagnostics, 
 * run related tests
 
   ```bash
-  go test -v -test.run 'TestDriverInfo*'
+  go test tests/metrics_test.go -v -test.run 'TestModuleInfo*'
   ```
 
 * get parsed metrics from failed asserts, and fill the required json-files in `testdata/intel/i40e/02_sfp_10_or_25g_sr/results`
@@ -164,7 +164,7 @@ This where it will require a little bit of data modification, especially if your
 * and have a look at the metrics
 
   ```bash
-  $ go test -v -test.run 'TestStatistics*'
+  $ go test tests/metrics_test.go -v -test.run 'TestStatistics*'
   === RUN   TestStatistics/intel/i40e/02_sfp_10_or_25g_sr
       metrics_test.go:120:
             Error:

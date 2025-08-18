@@ -1,0 +1,16 @@
+{
+    "Common": {
+        "DriverName": "virtio_net",
+        "DriverVersion": "1.0.0",
+        "FirmwareVersion": "",
+        "FirmwareVersionParts": [],
+        "BusAddress": "0000:00:04.0"
+    },
+    "Features": {
+        "EepromAccess": false,
+        "PrivFlags": false,
+        "RegisterDump": false,
+        "Statistics": true,
+        "Test": false
+    }
+}
