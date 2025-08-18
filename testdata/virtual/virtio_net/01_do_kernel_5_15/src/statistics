@@ -1,0 +1,14 @@
+NIC statistics:
+     rx_queue_0_packets: 1869634984
+     rx_queue_0_bytes: 1975950944041
+     rx_queue_0_drops: 0
+     rx_queue_0_xdp_packets: 0
+     rx_queue_0_xdp_tx: 0
+     rx_queue_0_xdp_redirects: 0
+     rx_queue_0_xdp_drops: 0
+     rx_queue_0_kicks: 55291
+     tx_queue_0_packets: 2157765149
+     tx_queue_0_bytes: 2039825986667
+     tx_queue_0_xdp_tx: 0
+     tx_queue_0_xdp_tx_drops: 0
+     tx_queue_0_kicks: 1803255888

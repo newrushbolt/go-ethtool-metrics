@@ -1,0 +1,14 @@
+{
+    "SupportedSettings": null,
+    "AdvertisedSettings": null,
+    "Settings": {
+        "Speed": "Unknown!",
+        "SpeedBytes": null,
+        "SpeedBits": null,
+        "Duplex": "Unknown! (255)",
+        "Port": "Other",
+        "Transceiver": "internal",
+        "AutoNegotiation": false,
+        "LinkDetected": true
+    }
+}
