@@ -20,7 +20,8 @@
             "RxBcastBytes": null,
             "TxUcastBytes": null,
             "TxMcastBytes": null,
-            "TxBcastBytes": null
+            "TxBcastBytes": null,
+            "RxDrops": 0
         },
         {
             "TxBytes": 26256,
@@ -30,7 +31,8 @@
             "RxBcastBytes": null,
             "TxUcastBytes": null,
             "TxMcastBytes": null,
-            "TxBcastBytes": null
+            "TxBcastBytes": null,
+            "RxDrops": 0
         }
     ]
 }

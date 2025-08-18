@@ -20,7 +20,8 @@
             "RxBcastBytes": null,
             "TxUcastBytes": null,
             "TxMcastBytes": null,
-            "TxBcastBytes": null
+            "TxBcastBytes": null,
+            "RxDrops": 0
         },
         {
             "TxBytes": 452345,
@@ -30,7 +31,8 @@
             "RxBcastBytes": null,
             "TxUcastBytes": null,
             "TxMcastBytes": null,
-            "TxBcastBytes": null
+            "TxBcastBytes": null,
+            "RxDrops": 0
         },
         {
             "TxBytes": 0,
@@ -40,7 +42,8 @@
             "RxBcastBytes": null,
             "TxUcastBytes": null,
             "TxMcastBytes": null,
-            "TxBcastBytes": null
+            "TxBcastBytes": null,
+            "RxDrops": 0
         },
         {
             "TxBytes": 0,
@@ -50,7 +53,8 @@
             "RxBcastBytes": null,
             "TxUcastBytes": null,
             "TxMcastBytes": null,
-            "TxBcastBytes": null
+            "TxBcastBytes": null,
+            "RxDrops": 0
         },
         {
             "TxBytes": 0,
@@ -60,7 +64,8 @@
             "RxBcastBytes": null,
             "TxUcastBytes": null,
             "TxMcastBytes": null,
-            "TxBcastBytes": null
+            "TxBcastBytes": null,
+            "RxDrops": 0
         },
         {
             "TxBytes": 0,
@@ -70,7 +75,8 @@
             "RxBcastBytes": null,
             "TxUcastBytes": null,
             "TxMcastBytes": null,
-            "TxBcastBytes": null
+            "TxBcastBytes": null,
+            "RxDrops": 0
         },
         {
             "TxBytes": 0,
@@ -80,7 +86,8 @@
             "RxBcastBytes": null,
             "TxUcastBytes": null,
             "TxMcastBytes": null,
-            "TxBcastBytes": null
+            "TxBcastBytes": null,
+            "RxDrops": 0
         },
         {
             "TxBytes": 0,
@@ -90,7 +97,8 @@
             "RxBcastBytes": null,
             "TxUcastBytes": null,
             "TxMcastBytes": null,
-            "TxBcastBytes": null
+            "TxBcastBytes": null,
+            "RxDrops": 0
         }
     ]
 }
