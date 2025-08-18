@@ -44,6 +44,14 @@ var rawQueuedRegexps = map[string][]string{
 	"tpa_bytes": {
 		`\[([0-9]+)\]: tpa_bytes`,
 	},
+	"rx_drops": {
+		`rx([0-9]+)_drops`,
+		`rx_queue_([0-9]+)_drops`,
+		// Not sure if we can treat `rx_queue_drop_cnt[0]` for gve driver as rx_drops,
+		// because there are also `rx_drops_packet_over_mru`, `rx_drops_invalid_checksum` and `rx_dropped_pkt`
+		// TODO: figure this out, probably by loadtesting with real data and reading gve driver source
+		`rx_queue_drop_cnt\[([0-9]+)\]`,
+	},
 }
 
 var queuedRegexps map[string][]*regexp.Regexp

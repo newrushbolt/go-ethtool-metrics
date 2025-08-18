@@ -11,5 +11,28 @@
         "TxCollisions": null,
         "RxCrcErrors": null
     },
-    "PerQueue": []
+    "PerQueue": [
+        {
+            "TxBytes": null,
+            "RxBytes": null,
+            "RxUcastBytes": null,
+            "RxMcastBytes": null,
+            "RxBcastBytes": null,
+            "TxUcastBytes": null,
+            "TxMcastBytes": null,
+            "TxBcastBytes": null,
+            "RxDrops": 0
+        },
+        {
+            "TxBytes": null,
+            "RxBytes": null,
+            "RxUcastBytes": null,
+            "RxMcastBytes": null,
+            "RxBcastBytes": null,
+            "TxUcastBytes": null,
+            "TxMcastBytes": null,
+            "TxBcastBytes": null,
+            "RxDrops": 0
+        }
+    ]
 }
