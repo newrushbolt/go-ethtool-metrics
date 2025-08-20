@@ -10,6 +10,8 @@ import (
 
 type queuedMetrics map[int]map[string]string
 
+// These regexps must not overlap
+// Multiple matches will cause an error and none of those matches will make it to the final metrics
 var rawQueuedRegexps = map[string][]string{
 	"rx_bytes": {
 		"rx-([0-9]+).bytes",
@@ -73,24 +75,41 @@ func compileQueuedRegexps(rawQueuedRegexps map[string][]string) map[string][]*re
 	return queuedRegexps
 }
 
+type queueMatchedMetric struct {
+	Value   string
+	Matches []queueMatchedMetricsMatch
+}
+type queueMatchedMetricsMatch struct {
+	Group   string
+	Pattern *regexp.Regexp
+	Queue   int
+}
+
+func cleanEmptyQueues(metricsMap *queuedMetrics) {
+	for queue, metrics := range *metricsMap {
+		if len(metrics) == 0 {
+			delete(*metricsMap, queue)
+		}
+	}
+}
+
+// This function fetches per-queue metrics due to regexp-rules from rawQueuedRegexps
+// If the metric matched more than one regexp, we skip the current match and log an error
 func extractQueuedMetrics(srcMetrics map[string]string) queuedMetrics {
-	queuedMetricsMap := queuedMetrics{}
+
+	matchedMetrics := map[string]queueMatchedMetric{}
 	for srcMetricName, srcMetricvalue := range srcMetrics {
 		for metricRegexpName, possibleMetricRegexps := range queuedRegexps {
-			regexpMatched := false
 			for _, metricRegexp := range possibleMetricRegexps {
 				regexpLogger := Logger.With("regexp", metricRegexp.String(), "regexpGroup", metricRegexpName, "metricName", srcMetricName)
+
 				matchedMetricRegexp := metricRegexp.FindAllStringSubmatch(srcMetricName, -1)
 				if matchedMetricRegexp == nil {
 					continue
 				}
-				if regexpMatched {
-					regexpLogger.Error("Queued metric has more than one match, some regexps are overlapping, skipping")
-				}
-				regexpMatched = true
 				regexpLogger.Debug("Metric matches pattern")
 				if len(matchedMetricRegexp) > 1 {
-					regexpLogger.Error("Regexp matched more than once, regexp or metric is broken, skipping")
+					regexpLogger.Error("Regexp matched more than once for one line, regexp or metric is broken, skipping")
 					continue
 				}
 
@@ -98,6 +117,7 @@ func extractQueuedMetrics(srcMetrics map[string]string) queuedMetrics {
 					regexpLogger.Error("Regexp first match does not have 2 matches, regexp or metric is broken, skipping")
 					continue
 				}
+
 				// We expect to have 1 match, that's why we taking [0] from matchedMetricRegexp
 				// and we need the first capture group, which is always second, that's why [1]
 				metricIndexString := matchedMetricRegexp[0][1]
@@ -109,44 +129,72 @@ func extractQueuedMetrics(srcMetrics map[string]string) queuedMetrics {
 				metricIndex := int(metricIndex64)
 				regexpLogger.Debug("Metric has index", "index", metricIndex)
 
-				currentIndexMap := queuedMetricsMap[metricIndex]
-				if currentIndexMap == nil {
-					newCurrentIndexMap := map[string]string{
-						metricRegexpName: srcMetricvalue,
-					}
-					queuedMetricsMap[metricIndex] = newCurrentIndexMap
-					continue
+				newMetricMatches := []queueMatchedMetricsMatch{
+					{
+						Group:   metricRegexpName,
+						Pattern: metricRegexp,
+						Queue:   metricIndex,
+					},
 				}
-				currentIndexMap[metricRegexpName] = srcMetricvalue
+
+				var currentMetricObject queueMatchedMetric
+				var ok bool
+				currentMetricObject, ok = matchedMetrics[srcMetricName]
+				if ok {
+					currentMetricObject.Matches = append(currentMetricObject.Matches, newMetricMatches...)
+				} else {
+					currentMetricObject = queueMatchedMetric{
+						Value:   srcMetricvalue,
+						Matches: newMetricMatches,
+					}
+				}
+				matchedMetrics[srcMetricName] = currentMetricObject
+
 			}
 		}
 	}
+
+	queuedMetricsMap := queuedMetrics{}
+	for metricName, metricObject := range matchedMetrics {
+		metricLogger := Logger.With("metricName", metricName, "metricObject", metricObject)
+		switch len(metricObject.Matches) {
+		case 0:
+			metricLogger.Debug("No per-queue regexp matched, skipping metric")
+		case 1:
+			match := metricObject.Matches[0]
+			currentIndexMap := queuedMetricsMap[match.Queue]
+			if currentIndexMap == nil {
+				newCurrentIndexMap := map[string]string{}
+				queuedMetricsMap[match.Queue] = newCurrentIndexMap
+			} else if _, ok := queuedMetricsMap[match.Queue][match.Group]; ok {
+				delete(queuedMetricsMap[match.Queue], match.Group)
+				metricLogger.Error("This metric is already matched by other regexp, skipping it at all. Regexp rules are probably broken.")
+				break
+			}
+			queuedMetricsMap[match.Queue][match.Group] = metricObject.Value
+			metricLogger.Debug("Metric added")
+		default:
+			metricLogger.Error("Metric has more than one match, skipping it at all. Regexp rules are probably broken.")
+		}
+	}
+	cleanEmptyQueues(&queuedMetricsMap)
 	return queuedMetricsMap
 }
 
-func queueRemovePerTypeBytes(stats *QueueStatistics) {
-	stats.TxUcastBytes = nil
-	stats.TxMcastBytes = nil
-	stats.TxBcastBytes = nil
-	stats.RxUcastBytes = nil
-	stats.RxMcastBytes = nil
-	stats.RxBcastBytes = nil
-}
-
 func queueGenerateMissingBytesMetrics(stats *QueueStatistics) {
-	if stats.RxBytes == nil {
-		stats.RxBytes = common.SumFieldsFloat64([]*float64{
-			stats.RxUcastBytes,
-			stats.RxMcastBytes,
-			stats.RxBcastBytes,
+	if stats.General.RxBytes == nil {
+		stats.General.RxBytes = common.SumFieldsFloat64([]*float64{
+			stats.PerType.RxUcastBytes,
+			stats.PerType.RxMcastBytes,
+			stats.PerType.RxBcastBytes,
 		})
 	}
 
-	if stats.TxBytes == nil {
-		stats.TxBytes = common.SumFieldsFloat64([]*float64{
-			stats.TxUcastBytes,
-			stats.TxMcastBytes,
-			stats.TxBcastBytes,
+	if stats.General.TxBytes == nil {
+		stats.General.TxBytes = common.SumFieldsFloat64([]*float64{
+			stats.PerType.TxUcastBytes,
+			stats.PerType.TxMcastBytes,
+			stats.PerType.TxBcastBytes,
 		})
 	}
 }
@@ -156,12 +204,24 @@ func parseQueuedInfo(statisticsMap map[string]string, config CollectConfig) *Per
 	perQueueStatistics := make(PerQueueStatistics, len(allQueuedMetrics))
 	for queue, queueMetricsMap := range allQueuedMetrics {
 		var queueStatistics QueueStatistics
-		common.ParseAbstractDataObject(&queueMetricsMap, &queueStatistics, "queue_statistics")
+
+		if config.PerQueueGeneral {
+			var general QueueStatisticsGeneral
+			common.ParseAbstractDataObject(&queueMetricsMap, &general, "queue_statistics_general")
+			queueStatistics.General = &general
+		}
+
+		if config.PerQueueGenerateMissingBytesMetrics || config.PerQueuePerType {
+			var perType QueueStatisticsPerType
+			common.ParseAbstractDataObject(&queueMetricsMap, &perType, "queue_statistics_per_type")
+			queueStatistics.PerType = &perType
+		}
 		if config.PerQueueGenerateMissingBytesMetrics {
 			queueGenerateMissingBytesMetrics(&queueStatistics)
 		}
-		if !config.PerQueuePerTypeBytes {
-			queueRemovePerTypeBytes(&queueStatistics)
+		// Deleting per-queue metrics if they were only needed to calculate missing general metrics
+		if config.PerQueueGenerateMissingBytesMetrics && !config.PerQueuePerType {
+			queueStatistics.PerType = nil
 		}
 
 		perQueueStatistics[queue] = queueStatistics

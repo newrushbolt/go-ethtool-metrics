@@ -1,6 +1,7 @@
 package statistics
 
 import (
+	"regexp"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -19,21 +20,19 @@ func ptr[T any](v T) *T { return &v }
 
 func TestPerTypeBytesDeletion(t *testing.T) {
 	config := CollectConfig{
-		PerQueue:                            true,
+		PerQueueGeneral:                     true,
 		PerQueueGenerateMissingBytesMetrics: true,
-		PerQueuePerTypeBytes:                false,
+		PerQueuePerType:                     false,
 	}
 
 	expectedParseResult := PerQueueStatistics{
 		QueueStatistics{
-			TxBytes:      ptr(2930.0),
-			RxBytes:      ptr(2931.0),
-			RxUcastBytes: nil,
-			RxMcastBytes: nil,
-			RxBcastBytes: nil,
-			TxUcastBytes: nil,
-			TxMcastBytes: nil,
-			TxBcastBytes: nil,
+			General: &QueueStatisticsGeneral{
+				TxBytes: ptr(2930.0),
+				RxBytes: ptr(2931.0),
+				RxDrops: nil,
+			},
+			PerType: nil,
 		},
 	}
 
@@ -43,21 +42,25 @@ func TestPerTypeBytesDeletion(t *testing.T) {
 
 func TestPerTypeBytesKeep(t *testing.T) {
 	config := CollectConfig{
-		PerQueue:                            true,
+		PerQueueGeneral:                     true,
 		PerQueueGenerateMissingBytesMetrics: true,
-		PerQueuePerTypeBytes:                true,
+		PerQueuePerType:                     true,
 	}
 
 	expectedParseResult := PerQueueStatistics{
 		QueueStatistics{
-			TxBytes:      ptr(2930.0),
-			RxBytes:      ptr(2931.0),
-			RxUcastBytes: ptr(1316.0),
-			RxMcastBytes: ptr(1613.0),
-			RxBcastBytes: ptr(2.0),
-			TxUcastBytes: ptr(1613.0),
-			TxMcastBytes: ptr(1316.0),
-			TxBcastBytes: ptr(1.0),
+			General: &QueueStatisticsGeneral{
+				TxBytes: ptr(2930.0),
+				RxBytes: ptr(2931.0),
+			},
+			PerType: &QueueStatisticsPerType{
+				RxUcastBytes: ptr(1316.0),
+				RxMcastBytes: ptr(1613.0),
+				RxBcastBytes: ptr(2.0),
+				TxUcastBytes: ptr(1613.0),
+				TxMcastBytes: ptr(1316.0),
+				TxBcastBytes: ptr(1.0),
+			},
 		},
 	}
 
@@ -71,7 +74,7 @@ func TestExtractQueuedMetricsMultipleRegexMatch(t *testing.T) {
 		"rx_queue_0_bytes": "200",
 	}
 	result := extractQueuedMetrics(metrics)
-	assert.NotNil(t, result)
+	assert.Equal(t, queuedMetrics{}, result)
 }
 
 func TestExtractQueuedMetricsInvalidQueueIndex(t *testing.T) {
@@ -79,7 +82,7 @@ func TestExtractQueuedMetricsInvalidQueueIndex(t *testing.T) {
 		"rx-abc.bytes": "400",
 	}
 	result := extractQueuedMetrics(metrics)
-	assert.NotNil(t, result)
+	assert.Equal(t, queuedMetrics{}, result)
 }
 
 func TestExtractQueuedMetricsNoMatch(t *testing.T) {
@@ -87,6 +90,24 @@ func TestExtractQueuedMetricsNoMatch(t *testing.T) {
 		"not_a_queue_metric": "999",
 	}
 	result := extractQueuedMetrics(metrics)
-	assert.NotNil(t, result)
-	assert.Equal(t, 0, len(result))
+	assert.Equal(t, queuedMetrics{}, result)
+}
+
+func TestExtractQueuedMetricsOverlappingRegexps(t *testing.T) {
+	// backup original and restore regexps at the end
+	orig := queuedRegexps
+	defer func() { queuedRegexps = orig }()
+	queuedRegexps = map[string][]*regexp.Regexp{
+		"tx_bytes": {
+			regexp.MustCompile(`tx[0-9a-z]+_([0-9])[0-9a-z]+`),
+			regexp.MustCompile(`tx([0-9])_[0-9a-z]+`),
+		},
+		"tx_bytes_wrong": {
+			regexp.MustCompile(`tx([0-9])_[0-9a-z]+`),
+		},
+	}
+
+	metrics := map[string]string{"tx0_0bytes": "123"}
+	result := extractQueuedMetrics(metrics)
+	assert.Equal(t, queuedMetrics{}, result)
 }
