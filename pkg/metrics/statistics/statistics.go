@@ -29,7 +29,8 @@ func ParseInfo(rawInfo string, config *CollectConfig) *StatisticsInfo {
 	statistics := StatisticsInfo{}
 	generalStatisticsMap := common.ParseAbstractColonData(rawInfo, "", true)
 
-	if config.PerQueue {
+	// This if should check all possible per-queue metric groups
+	if config.PerQueueGeneral || config.PerQueuePerType {
 		statistics.PerQueue = parseQueuedInfo(generalStatisticsMap, *config)
 	}
 

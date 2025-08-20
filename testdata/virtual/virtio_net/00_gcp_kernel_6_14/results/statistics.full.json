@@ -13,26 +13,34 @@
     },
     "PerQueue": [
         {
-            "TxBytes": null,
-            "RxBytes": null,
-            "RxUcastBytes": null,
-            "RxMcastBytes": null,
-            "RxBcastBytes": null,
-            "TxUcastBytes": null,
-            "TxMcastBytes": null,
-            "TxBcastBytes": null,
-            "RxDrops": 0
+            "General": {
+                "TxBytes": null,
+                "RxBytes": null,
+                "RxDrops": 0
+            },
+            "PerType": {
+                "RxUcastBytes": null,
+                "RxMcastBytes": null,
+                "RxBcastBytes": null,
+                "TxUcastBytes": null,
+                "TxMcastBytes": null,
+                "TxBcastBytes": null
+            }
         },
         {
-            "TxBytes": null,
-            "RxBytes": null,
-            "RxUcastBytes": null,
-            "RxMcastBytes": null,
-            "RxBcastBytes": null,
-            "TxUcastBytes": null,
-            "TxMcastBytes": null,
-            "TxBcastBytes": null,
-            "RxDrops": 0
+            "General": {
+                "TxBytes": null,
+                "RxBytes": null,
+                "RxDrops": 0
+            },
+            "PerType": {
+                "RxUcastBytes": null,
+                "RxMcastBytes": null,
+                "RxBcastBytes": null,
+                "TxUcastBytes": null,
+                "TxMcastBytes": null,
+                "TxBcastBytes": null
+            }
         }
     ]
 }

@@ -13,15 +13,19 @@
     },
     "PerQueue": [
         {
-            "TxBytes": 2039825986667,
-            "RxBytes": 1975950944041,
-            "RxUcastBytes": null,
-            "RxMcastBytes": null,
-            "RxBcastBytes": null,
-            "TxUcastBytes": null,
-            "TxMcastBytes": null,
-            "TxBcastBytes": null,
-            "RxDrops": 0
+            "General": {
+                "TxBytes": 2039825986667,
+                "RxBytes": 1975950944041,
+                "RxDrops": 0
+            },
+            "PerType": {
+                "RxUcastBytes": null,
+                "RxMcastBytes": null,
+                "RxBcastBytes": null,
+                "TxUcastBytes": null,
+                "TxMcastBytes": null,
+                "TxBcastBytes": null
+            }
         }
     ]
 }
