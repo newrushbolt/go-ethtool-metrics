@@ -2,6 +2,7 @@
 package statistics
 
 import (
+	"fmt"
 	"regexp"
 	"strconv"
 
@@ -14,15 +15,15 @@ type queuedMetrics map[int]map[string]string
 // Multiple matches will cause an error and none of those matches will make it to the final metrics
 var rawQueuedRegexps = map[string][]string{
 	"rx_bytes": {
-		"rx-([0-9]+).bytes",
+		"rx-([0-9]+)\\.bytes",
 		"rx_queue_([0-9]+)_bytes",
-		"rx-([0-9]+).rx_bytes",
+		"rx-([0-9]+)\\.rx_bytes",
 		`rx_bytes\[([0-9]+)\]`,
 	},
 	"tx_bytes": {
-		"tx-([0-9]+).bytes",
+		"tx-([0-9]+)\\.bytes",
 		"tx_queue_([0-9]+)_bytes",
-		"tx-([0-9]+).tx_bytes",
+		"tx-([0-9]+)\\.tx_bytes",
 		`tx_bytes\[([0-9]+)\]`,
 	},
 	"rx_ucast_bytes": {
@@ -64,13 +65,14 @@ func init() {
 
 func compileQueuedRegexps(rawQueuedRegexps map[string][]string) map[string][]*regexp.Regexp {
 	queuedRegexps := make(map[string][]*regexp.Regexp, len(rawQueuedRegexps))
-	for regexName, regexStrings := range rawQueuedRegexps {
+	for regexpName, regexpStrings := range rawQueuedRegexps {
 		var compiledRegexps []*regexp.Regexp
-		for _, regexString := range regexStrings {
-			compiledRegex := regexp.MustCompile(regexString)
+		for _, regexpString := range regexpStrings {
+			anchoredRegexpString := fmt.Sprintf("^%s$", regexpString)
+			compiledRegex := regexp.MustCompile(anchoredRegexpString)
 			compiledRegexps = append(compiledRegexps, compiledRegex)
 		}
-		queuedRegexps[regexName] = compiledRegexps
+		queuedRegexps[regexpName] = compiledRegexps
 	}
 	return queuedRegexps
 }
