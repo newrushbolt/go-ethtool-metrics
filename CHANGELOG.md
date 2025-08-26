@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.0.9](https://github.com/newrushbolt/go-ethtool-metrics/compare/v0.0.8...v0.0.9) (2025-08-26)
+
+
+### Bug Fixes
+
+* add google gve virtual nic support ([c3f1268](https://github.com/newrushbolt/go-ethtool-metrics/commit/c3f126819bc0959514c23637a957401e85c20157))
+* add per-queue drops ([79fd09a](https://github.com/newrushbolt/go-ethtool-metrics/commit/79fd09a8b2616ac6144492f64e34e3fe9f390d35))
+* add virtio support ([009937f](https://github.com/newrushbolt/go-ethtool-metrics/commit/009937f579fd450d5f5de0545bac1fa5e96bc52b))
+* better per-queue regexps ([c2eeaaf](https://github.com/newrushbolt/go-ethtool-metrics/commit/c2eeaafe62b4262b2f64df0551a99fd17a56dbad))
+* better testing and logging for queue parse errors ([882ff73](https://github.com/newrushbolt/go-ethtool-metrics/commit/882ff7317237d6c466ae3f7cd1ad0f2a7f36b700))
+* calculate total per-queue bytes for broadcom ([9c84000](https://github.com/newrushbolt/go-ethtool-metrics/commit/9c84000a5e0736e721630447958639d09cc532d1))
+* pre-compile queue regexps once for a package ([f289ac8](https://github.com/newrushbolt/go-ethtool-metrics/commit/f289ac821a635bdd219ed63ba08de4c86151ce0f))
+* separate dropped packets from discarded ones ([c7b58fe](https://github.com/newrushbolt/go-ethtool-metrics/commit/c7b58fe249a5ca38b587c9bbd8367ca3a9e73a5c))
+* split per-queue metrics by groups ([2bbd036](https://github.com/newrushbolt/go-ethtool-metrics/commit/2bbd036090bf8d163f49169ba28f21ef3f2b4587))
+
 ## [0.0.8](https://github.com/newrushbolt/go-ethtool-metrics/compare/v0.0.7...v0.0.8) (2025-08-08)
 
 
