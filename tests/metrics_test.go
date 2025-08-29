@@ -45,6 +45,7 @@ func GetFixtureList() []string {
 		"google/gve/00_arm64_c4a",
 		"virtual/virtio_net/00_gcp_kernel_6_14",
 		"virtual/virtio_net/01_do_kernel_5_15",
+		"virtual/virtio_net/02_yacloud_kernel_6_8",
 	}
 }
 
