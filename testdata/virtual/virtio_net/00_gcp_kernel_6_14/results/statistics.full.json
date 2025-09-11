@@ -25,6 +25,18 @@
                 "TxUcastBytes": null,
                 "TxMcastBytes": null,
                 "TxBcastBytes": null
+            },
+            "Xdp": {
+                "RxDrops": 0,
+                "RxSends": 0,
+                "RxSendErrors": null,
+                "RxAborts": null,
+                "RxPasses": null,
+                "RxRedirects": 0,
+                "RxRedirectErrors": null,
+                "RxAllocFails": null,
+                "TxSends": 0,
+                "TxSendErrors": 0
             }
         },
         {
@@ -40,6 +52,18 @@
                 "TxUcastBytes": null,
                 "TxMcastBytes": null,
                 "TxBcastBytes": null
+            },
+            "Xdp": {
+                "RxDrops": 0,
+                "RxSends": 0,
+                "RxSendErrors": null,
+                "RxAborts": null,
+                "RxPasses": null,
+                "RxRedirects": 0,
+                "RxRedirectErrors": null,
+                "RxAllocFails": null,
+                "TxSends": 0,
+                "TxSendErrors": 0
             }
         }
     ]

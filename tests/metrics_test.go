@@ -201,6 +201,7 @@ func TestStatisticsFull(t *testing.T) {
 			config := statistics.CollectConfig{
 				General:                             true,
 				PerQueueGeneral:                     true,
+				PerQueueXdp:                         true,
 				PerQueuePerType:                     true,
 				PerQueueGenerateMissingBytesMetrics: true,
 			}
