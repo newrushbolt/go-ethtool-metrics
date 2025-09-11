@@ -1,7 +1,9 @@
 package statistics
 
 import (
+	"reflect"
 	"regexp"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -110,4 +112,31 @@ func TestExtractQueuedMetricsOverlappingRegexps(t *testing.T) {
 	metrics := map[string]string{"tx0_0bytes": "123"}
 	result := extractQueuedMetrics(metrics)
 	assert.Equal(t, queuedMetrics{}, result)
+}
+
+func TestQueueStatisticsStructTagsHaveRegexps(t *testing.T) {
+	findMissingTags := func(tagPrefix string, structType reflect.Type) (missingTags []string) {
+		for i := 0; i < structType.NumField(); i++ {
+			f := structType.Field(i)
+			tagListString := f.Tag.Get(tagPrefix)
+			if tagListString == "" {
+				continue
+			}
+			tagList := strings.Split(tagListString, ",")
+			for _, tag := range tagList {
+				tag = strings.TrimSpace(tag)
+				if tag == "" {
+					continue
+				}
+				if _, ok := rawQueuedRegexps[tag]; !ok {
+					missingTags = append(missingTags, tag)
+				}
+			}
+		}
+		return
+	}
+
+	assert.Empty(t, findMissingTags("queue_statistics_general", reflect.TypeOf(QueueStatisticsGeneral{})))
+	assert.Empty(t, findMissingTags("queue_statistics_per_type", reflect.TypeOf(QueueStatisticsPerType{})))
+	assert.Empty(t, findMissingTags("queue_statistics_xdp", reflect.TypeOf(QueueStatisticsXdp{})))
 }
