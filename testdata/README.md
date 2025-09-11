@@ -24,6 +24,14 @@ testdata
 
 ## Adding new testdata
 
+Before we start, let's prepare some envs:
+
+```bash
+export TESTDATA_INSTANCE_NAME="intel/i40e/02_sfp_10_or_25g_sr"
+export TESTDATA_HOST="server-1.my-company.local"
+export TESTDATA_INTERFACE="eth0"
+```
+
 ### Driver info, generic info
 
 For `driver_info` and `generic_info` adding new data is pretty straightforward:
@@ -31,17 +39,17 @@ For `driver_info` and `generic_info` adding new data is pretty straightforward:
 * create new folders with incremented index
 
   ```bash
-  mkdir -p testdata/intel/i40e/02_sfp_10_or_25g_sr/{src,results}
+  mkdir -p testdata/$TESTDATA_INSTANCE_NAME/{src,results}
   ```
 
 * fill files in `src` with ethtool output (assuming the interface name is eth0 ofk)
 
   ```bash
-  ssh server-1.mycompany.local sudo ethtool -i eth0 2>/dev/null \
-    > testdata/intel/i40e/02_sfp_10_or_25g_sr/src/driver_info
+  ssh $TESTDATA_HOST sudo ethtool -i $TESTDATA_INTERFACE 2>/dev/null \
+    > testdata/$TESTDATA_INSTANCE_NAME/src/driver_info
   
-  ssh server-1.mycompany.local sudo ethtool eth0 2>/dev/null \
-    > testdata/intel/i40e/02_sfp_10_or_25g_sr/src/generic_info
+  ssh $TESTDATA_HOST sudo ethtool $TESTDATA_INTERFACE 2>/dev/null \
+    > testdata/$TESTDATA_INSTANCE_NAME/src/generic_info
   ```
 
 * add new testdata to `GetFixtureList()` in [metrics_test.go](../metrics_test.go)
@@ -59,10 +67,10 @@ For `driver_info` and `generic_info` adding new data is pretty straightforward:
           }
   ```
 
-* create empty result-files in `testdata/intel/i40e/02_sfp_10_or_25g_sr/results` for each mode
+* create empty result-files in `testdata/$TESTDATA_INSTANCE_NAME/results` for each mode
 
   ```bash
-  touch testdata/intel/i40e/02_sfp_10_or_25g_sr/results/{module_info,driver_info,generic_info,statistics}.{default,full}.json
+  touch testdata/$TESTDATA_INSTANCE_NAME/results/{module_info,driver_info,generic_info,statistics}.{default,full}.json
   ```
 
 * run related tests
@@ -131,13 +139,13 @@ ethtool -m eth0 | grep -i threshold
 In my experience this happens because of incompatible driver or firmware versions,  
 so you may need to get tuple kernel_version:driver_version:nic_firmware_version right.
 
-After fixing that, and ensuring `ethtool -m eno2` shows you proper diagnostics, the steps are simple:
+After fixing that, and ensuring `ethtool -m eth0` shows you proper diagnostics, the steps are simple:
 
 * fill files in `src` with ethtool output
 
   ```bash
-  ssh server-1.mycompany.local sudo ethtool -m eth0 2>/dev/null \
-    > testdata/intel/i40e/02_sfp_10_or_25g_sr/src/module_info
+  ssh $TESTDATA_HOST sudo ethtool -m $TESTDATA_INTERFACE 2>/dev/null \
+    > testdata/$TESTDATA_INSTANCE_NAME/src/module_info
   ```
 
 * run related tests
@@ -157,8 +165,8 @@ This where it will require a little bit of data modification, especially if your
 * lets gather the metrics first
 
   ```bash
-  ssh server-1.mycompany.local sudo ethtool -S eth0 2>/dev/null \
-    > testdata/intel/i40e/02_sfp_10_or_25g_sr/src/statistics
+  ssh $TESTDATA_HOST sudo ethtool -S $TESTDATA_INTERFACE 2>/dev/null \
+    > testdata/$TESTDATA_INSTANCE_NAME/src/statistics
   ```
 
 * and have a look at the metrics
