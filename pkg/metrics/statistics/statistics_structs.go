@@ -3,6 +3,7 @@ package statistics
 type CollectConfig struct {
 	General         bool
 	PerQueueGeneral bool
+	PerQueueXdp     bool
 	PerQueuePerType bool
 	// Some drivers (at least bnxt_en) does not provide per-queue tx_bytes\rx_bytes metrics.
 	// This flag allows us to generate them using formula `bytes=ucast_bytes+mcast_bytes+bcast_bytes`
@@ -13,6 +14,7 @@ func (config CollectConfig) Default() *CollectConfig {
 	return &CollectConfig{
 		General:                             true,
 		PerQueueGeneral:                     false,
+		PerQueueXdp:                         false,
 		PerQueuePerType:                     false,
 		PerQueueGenerateMissingBytesMetrics: true,
 	}
@@ -28,13 +30,14 @@ type PerQueueStatistics []QueueStatistics
 type QueueStatistics struct {
 	General *QueueStatisticsGeneral
 	PerType *QueueStatisticsPerType
+	Xdp     *QueueStatisticsXdp
 }
 
 type QueueStatisticsGeneral struct {
 	TxBytes *float64 `queue_statistics_general:"tx_bytes"`
 	RxBytes *float64 `queue_statistics_general:"rx_bytes"`
 
-	RxDrops *float64 `queue_statistics_general:"rx_drops"`
+	RxDrops *float64 `queue_statistics_general:"rx_drops,rx_drop_cnt"`
 	// Other "yet to be supported metrics"
 	// First prio
 	// [0]: tx_errors: 0
@@ -42,7 +45,7 @@ type QueueStatisticsGeneral struct {
 	// [0]: rx_discards: 0
 	// [0]: rx_errors: 0
 	// Second prio
-	// [0]: tpa_packets: 42605077
+	// [0]: tpa_packets: 42605077 // What is TPA anyway?
 	// [0]: tpa_bytes: 94005443409
 	// [0]: tpa_events: 19894790
 	// [0]: tpa_aborts: 8731049
@@ -65,6 +68,38 @@ type QueueStatisticsPerType struct {
 	// [0]: tx_ucast_packets: 5860187670
 	// [0]: tx_mcast_packets: 1
 	// [0]: tx_bcast_packets: 0
+}
+
+// This is where naming and units get kinda complicated.
+//
+// As fas as I understood from virtio_net.c, `*_xdp_tx`
+// increments per XDP_TX event, which operates the buffer, not the exact number of bytes.
+// The same goes for `*_xdp_redirects` and `*_xdp_drops`.
+// So it is not amount of bytes nor the packets, it's amount of events.
+//
+// Names like `RxXdpTx` might be very misleading,
+// that's why I'm presenting `rx_xdp_tx` as `RxSends`
+// https://github.com/torvalds/linux/blob/v6.14/include/uapi/linux/bpf.h#L6448
+// There are more types of events, but only TX seems confusing, so keeping other "as is"
+//
+// Google in their GVE driver made naming even worse 🤡
+// tx_xdp_xmit        BUT rx_xdp_tx
+// tx_xdp_xmit_errors BUT rx_xdp_tx_errors
+//
+// We do really need some sort of metric standart 🫠
+type QueueStatisticsXdp struct {
+	RxDrops      *float64 `queue_statistics_xdp:"rx_xdp_drops"`
+	RxSends      *float64 `queue_statistics_xdp:"rx_xdp_tx"`
+	RxSendErrors *float64 `queue_statistics_xdp:"rx_xdp_tx_errors"`
+
+	RxAborts         *float64 `queue_statistics_xdp:"rx_xdp_aborted"`
+	RxPasses         *float64 `queue_statistics_xdp:"rx_xdp_pass"`
+	RxRedirects      *float64 `queue_statistics_xdp:"rx_xdp_redirect,rx_xdp_redirects"`
+	RxRedirectErrors *float64 `queue_statistics_xdp:"rx_xdp_redirect_errors"`
+	RxAllocFails     *float64 `queue_statistics_xdp:"rx_xdp_alloc_fails"`
+
+	TxSends      *float64 `queue_statistics_xdp:"tx_xdp_tx,tx_xdp_xmit"`
+	TxSendErrors *float64 `queue_statistics_xdp:"tx_xdp_xmit_errors,tx_xdp_tx_drops"`
 }
 
 type GeneralStatistics struct {

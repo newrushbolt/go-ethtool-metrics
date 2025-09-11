@@ -14,6 +14,7 @@ type queuedMetrics map[int]map[string]string
 // These regexps must not overlap
 // Multiple matches will cause an error and none of those matches will make it to the final metrics
 var rawQueuedRegexps = map[string][]string{
+	// General
 	"rx_bytes": {
 		"rx-([0-9]+)\\.bytes",
 		"rx_queue_([0-9]+)_bytes",
@@ -26,6 +27,17 @@ var rawQueuedRegexps = map[string][]string{
 		"tx-([0-9]+)\\.tx_bytes",
 		`tx_bytes\[([0-9]+)\]`,
 	},
+	"rx_drops": {
+		`rx([0-9]+)_drops`,
+		`rx_queue_([0-9]+)_drops`,
+	},
+	"rx_drop_cnt": {
+		// Not sure if we can treat `rx_queue_drop_cnt[0]` for gve driver as rx_drops,
+		// because there are also `rx_drops_packet_over_mru`, `rx_drops_invalid_checksum` and `rx_dropped_pkt`
+		// TODO: figure this out, probably by loadtesting with real data and reading gve driver source
+		`rx_queue_drop_cnt\[([0-9]+)\]`,
+	},
+	// PerType
 	"rx_ucast_bytes": {
 		`\[([0-9]+)\]: rx_ucast_bytes`,
 	},
@@ -44,16 +56,53 @@ var rawQueuedRegexps = map[string][]string{
 	"tx_bcast_bytes": {
 		`\[([0-9]+)\]: tx_bcast_bytes`,
 	},
-	"tpa_bytes": {
-		`\[([0-9]+)\]: tpa_bytes`,
+	// XDP RX
+	"rx_xdp_drops": {
+		`rx([0-9]+)_xdp_drops`,
+		`rx_queue_([0-9]+)_xdp_drops`,
+		`rx_xdp_drop\[([0-9]+)\]`,
 	},
-	"rx_drops": {
-		`rx([0-9]+)_drops`,
-		`rx_queue_([0-9]+)_drops`,
-		// Not sure if we can treat `rx_queue_drop_cnt[0]` for gve driver as rx_drops,
-		// because there are also `rx_drops_packet_over_mru`, `rx_drops_invalid_checksum` and `rx_dropped_pkt`
-		// TODO: figure this out, probably by loadtesting with real data and reading gve driver source
-		`rx_queue_drop_cnt\[([0-9]+)\]`,
+	"rx_xdp_tx": {
+		`rx([0-9]+)_xdp_tx`,
+		`rx_queue_([0-9]+)_xdp_tx`,
+		`rx_xdp_tx\[([0-9]+)\]`,
+	},
+	"rx_xdp_tx_errors": {
+		`rx_xdp_tx_errors\[([0-9]+)\]`,
+	},
+	"rx_xdp_aborted": {
+		`rx_xdp_aborted\[([0-9]+)\]`,
+	},
+	"rx_xdp_pass": {
+		`rx_xdp_pass\[([0-9]+)\]`,
+	},
+	"rx_xdp_redirect": {
+		`rx_xdp_redirect\[([0-9]+)\]`,
+	},
+	"rx_xdp_redirects": {
+		`rx([0-9]+)_xdp_redirects`,
+		`rx_queue_([0-9]+)_xdp_redirects`,
+	},
+	"rx_xdp_redirect_errors": {
+		`rx_xdp_redirect_errors\[([0-9]+)\]`,
+	},
+	"rx_xdp_alloc_fails": {
+		`rx_xdp_alloc_fails\[([0-9]+)\]`,
+	},
+	// XDP TX
+	"tx_xdp_tx": {
+		`tx([0-9]+)_xdp_tx`,
+		`tx_queue_([0-9]+)_xdp_tx`,
+	},
+	"tx_xdp_xmit": {
+		`tx_xdp_xmit\[([0-9]+)\]`,
+	},
+	"tx_xdp_xmit_errors": {
+		`tx_xdp_xmit_errors\[([0-9]+)\]`,
+	},
+	"tx_xdp_tx_drops": {
+		`tx([0-9]+)_xdp_tx_drops`,
+		`tx_queue_([0-9]+)_xdp_tx_drops`,
 	},
 }
 
@@ -98,7 +147,6 @@ func cleanEmptyQueues(metricsMap *queuedMetrics) {
 // This function fetches per-queue metrics due to regexp-rules from rawQueuedRegexps
 // If the metric matched more than one regexp, we skip the current match and log an error
 func extractQueuedMetrics(srcMetrics map[string]string) queuedMetrics {
-
 	matchedMetrics := map[string]queueMatchedMetric{}
 	for srcMetricName, srcMetricvalue := range srcMetrics {
 		for metricRegexpName, possibleMetricRegexps := range queuedRegexps {
@@ -211,6 +259,12 @@ func parseQueuedInfo(statisticsMap map[string]string, config CollectConfig) *Per
 			var general QueueStatisticsGeneral
 			common.ParseAbstractDataObject(&queueMetricsMap, &general, "queue_statistics_general")
 			queueStatistics.General = &general
+		}
+
+		if config.PerQueueXdp {
+			var xdp QueueStatisticsXdp
+			common.ParseAbstractDataObject(&queueMetricsMap, &xdp, "queue_statistics_xdp")
+			queueStatistics.Xdp = &xdp
 		}
 
 		if config.PerQueueGenerateMissingBytesMetrics || config.PerQueuePerType {
