@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.0.10](https://github.com/newrushbolt/go-ethtool-metrics/compare/v0.0.9...v0.0.10) (2025-09-14)
+
+
+### Bug Fixes
+
+* add virtio data from yacloud ([21ef96a](https://github.com/newrushbolt/go-ethtool-metrics/commit/21ef96af6205773c7ddbbfbcf589c505aa1148de))
+* add XDP metrics ([3e15ee4](https://github.com/newrushbolt/go-ethtool-metrics/commit/3e15ee4c80d48c6d2a66724122e247dcbcb2516c))
+* better testdata README ([b719c9e](https://github.com/newrushbolt/go-ethtool-metrics/commit/b719c9e4ce78f548107bd2333ce2f51fb38ca29f))
+* detect missing queue regexps ([13902f7](https://github.com/newrushbolt/go-ethtool-metrics/commit/13902f7d5d142b80ea10d65b1c9405004710dd54))
+
 ## [0.0.9](https://github.com/newrushbolt/go-ethtool-metrics/compare/v0.0.8...v0.0.9) (2025-08-26)
 
 
